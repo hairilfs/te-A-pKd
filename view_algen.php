@@ -39,7 +39,8 @@ $gen_now = array();
   print_r($a3);
   echo "</pre>";
 
-$saya->cetak_individu_31($gen_now);
+// $saya->cetak_individu_31($gen_now);
+$saya->cetak_individu_31($gen_baru);
 
 
 $end = microtime(true);

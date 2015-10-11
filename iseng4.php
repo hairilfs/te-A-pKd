@@ -19,4 +19,17 @@ for($i=0;$i<=6;$i++){
   }
   echo "<br>";
 }
+
+$f = 5;
+$g = 10;
+$h = 20;
+
+if ($f < $g) {
+  echo "g lebih besar";
+} elseif ($f < $h) {
+  echo "h lebih besar";
+} elseif ($h > $f) {
+  echo "h lebih besar";
+}
+
 ?>

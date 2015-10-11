@@ -6,33 +6,13 @@ class Hairil 	{
 
   function gen_rand_shift() {
     $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
-    shuffle($a);
+    // shuffle($a);
     $random = array_rand($a,1);
 
     return $a[$random];
   }
 
   function gen_array_ind() {
-    $ind 	= array();
-    $pkd 	= array();
-    $hari = array();
-    $rand05 = 0;
-    for ($y=0; $y < 20; $y++) { // individu , populasi
-      for ($x=0; $x < 22; $x++) { // pkd
-        for ($i=0; $i < 31; $i++) { // hari
-            $acak2 = $this->gen_rand_shift();
-          array_push($hari, $acak2);
-        }
-        array_push($pkd, $hari);
-        $hari = array();
-      }
-      array_push($ind, $pkd);
-      $pkd = array();
-    }
-    return $ind;
-  }
-
-  function gen_array_ind2() {
     $ind 	  = array();
     $pkd 	  = array();
     $hari   = array();
@@ -61,85 +41,36 @@ class Hairil 	{
     return $ind;
   }
 
-  function cek_libur($new_ind) {
+  // penalti ini terjadi apabila seorang petugas sudah 2 hari libur dan besok tidak masuk siang
+  function cek_shiftLLS($individu) {
+    $new_ind = $individu;
     $loop_aja = count($new_ind); // 5
     $loop_pkd = count($new_ind[0]); // 10
     $loop_hari = count($new_ind[0][0]); //30
-    $penaliti_pola_libur = array();
-    $penalti1 = 0;
-    $penalti2 = 0;
-    $gap = 0;
 
+    $hc31 = 0;
+    $hc_ind = array();
     for ($i=0; $i < $loop_aja; $i++) {
-      $gap = 0;
-      $w = 0;
       for ($j=0; $j < $loop_pkd; $j++) {
-        if ($gap == 6) {
-          $w = 1;
-          $gap = 0;
-        }
-        $k = 0;
-        while ($k < ($loop_hari-1)) {
-          if ($k == 0 && $w==0) {
-            // if ($new_ind[$i][$j][$k+5-$gap]!="L" || $new_ind[$i][$j][$k+6-$gap]!="L" ) {
-            //   $penalti1 += 1;
-            $new_ind[$i][$j][$k+5-$gap]="L";
-            $new_ind[$i][$j][$k+6-$gap]="L";
-            $k+=5;
-            // echo $k." ";
-            // }
-          } elseif ($k == 0 && $w!=0) {
-            // if ($new_ind[$i][$j][$k+7-$gap]!="L" || $new_ind[$i][$j][$k+8-$gap]!="L" ) {
-            //   $penalti1 += 1;
-            $new_ind[$i][$j][$k]="L";
-            $w=0;
-            // $new_ind[$i][$j][$k+8-$gap]="L";
-            // }
-            $k+=6;
-            // echo $k." ";
-          } elseif ($k != 0 && $k <= 20 ) {
-            // if ($new_ind[$i][$j][$k+7-$gap]!="L" || $new_ind[$i][$j][$k+8-$gap]!="L" ) {
-            //   $penalti1 += 1;
-            $new_ind[$i][$j][$k+7-$gap]="L";
-            $new_ind[$i][$j][$k+8-$gap]="L";
-            // }
-            $k+=7;
-            // echo $k." ";
-          } elseif ($k != 0 && $k >= 20 && $gap==3) {
-            // if ($new_ind[$i][$j][$k+7-$gap]!="L" || $new_ind[$i][$j][$k+8-$gap]!="L" ) {
-            //   $penalti1 += 1;
-            $new_ind[$i][$j][$k+7-$gap]="L";
-            // $new_ind[$i][$j][$k+8-$gap]="L";
-            // }
-            $k+=7;
-            // echo $k." ";
-          } elseif ($k != 0 && $k >= 20 && $gap>=4) {
-            // if ($new_ind[$i][$j][$k+7-$gap]!="L" || $new_ind[$i][$j][$k+8-$gap]!="L" ) {
-            //   $penalti1 += 1;
-            $new_ind[$i][$j][$k+7-$gap]="L";
-            $new_ind[$i][$j][$k+8-$gap]="L";
-            // }
-            $k+=7;
-            // echo $k." ";
-          } else {
-            $k+=1;
+        for ($k=0; $k < $loop_hari-2; $k++) {
+          $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
+          if ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S" ) {
+            $hc31 += 1;
+          } elseif ($k == 0 AND substr($new_ind[$i][$j][$k], 0,1)!="S" AND $new_ind[$i][$j][5]=="L") {
+            $hc31 += 1;
+          } elseif ($k == 1 AND substr($new_ind[$i][$j][$k], 0,1)!="S" AND $new_ind[$i][$j][6]=="L") {
+            $hc31 += 1;
           }
-          // echo $gap;
-          // $k+=5;
         }
-
-        $gap += 1;
-        // echo $gap;
       }
-      // array_push($penaliti_pola_libur, $penalti1);
-      $penalti1 = 0;
+      array_push($hc_ind, $hc31);
+      $hc31 = 0;
     }
-    // return $penaliti_pola_libur;
-    return $new_ind;
+    return $hc_ind;
   }
 
-  // penalti ini terjadi apabila seorang petugas hari ini masuk malam, besoknya masuk pagi
-  function cek_shift31($individu) {
+  // penalti ini terjadi apabila seorang petugas hari ini masuk malam dan besok masuk pagi
+  function cek_shiftMP($individu) {
     $new_ind = $individu;
     $loop_aja = count($new_ind); // 5
     $loop_pkd = count($new_ind[0]); // 10
@@ -150,7 +81,9 @@ class Hairil 	{
     for ($i=0; $i < $loop_aja; $i++) {
       for ($j=0; $j < $loop_pkd; $j++) {
         for ($k=0; $k < $loop_hari-1; $k++) {
-          if ($new_ind[$i][$j][$k]==3 AND $new_ind[$i][$j][$k+1]==1 ) {
+          $kini = substr($new_ind[$i][$j][$k], 0,1);
+          $esok = substr($new_ind[$i][$j][$k+1], 0,1);
+          if ($kini=="M" AND $esok=="P") {
             $hc31 += 1;
           }
         }
@@ -189,28 +122,82 @@ class Hairil 	{
     }
     return $hc_ind;
   }
+  // penalti ini terjadi apabila jumlah petugas jaga dalam satu hari kurang dari jumlah yang ditentukan
+  function cek_shiftHR($individu) {
+    $new_ind = $individu;
+    $loop_aja = count($new_ind); // 5
+    $loop_pkd = count($new_ind[0]); // 10
+    $loop_hari = count($new_ind[0][0]); //30
 
-  function cetak_individu_minjaga($individu) {
-    $loop_aja = count($individu); // 5
-    $loop_pkd = count($individu[0]); // 10
-    $loop_hari = count($individu[0][0]); //30
+    $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
+    $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
+    $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
+    $hc_sp = 0;
 
-    for ($i=0; $i < $loop_aja; $i++) {
-      echo "<label>Individu ke ".$i;
-      echo "<table border='1' style='border-collapse: collapse;'";
-      for ($j=0; $j < $loop_pkd; $j++) {
-        echo "<tr>";
-        for ($k=0; $k < $loop_hari; $k++) {
-          if ($individu[$i][$j][$k]!=0) {
-            echo "<td width='20px' align='center'>".$individu[$i][$j][$k]."</td>";
-          } else {
-            echo "<td width='20px' align='center' style='background: grey;'>".$individu[$i][$j][$k]."</td>";
+    $hc_hari = 0;
+    $hc_lbr = 0;
+    $hc_ind = array();
+
+    for ($q=0; $q < $loop_aja; $q++) {
+      for ($w=0; $w < $loop_hari; $w++) {
+        for ($e=0; $e < $loop_pkd; $e++) {
+          switch ($new_ind[$q][$e][$w]) {
+            case 'P1':
+            $hc_p1 += 1;
+            break;
+            case 'S1':
+            $hc_s1 += 1;
+            break;
+            case 'M1':
+            $hc_m1 += 1;
+            break;
+            case 'P2':
+            $hc_p2 += 1;
+            break;
+            case 'S2':
+            $hc_s2 += 1;
+            break;
+            case 'M2':
+            $hc_m2 += 1;
+            break;
+            case 'PC':
+            $hc_pc += 1;
+            break;
+            case 'SC':
+            $hc_sc += 1;
+            break;
+            case 'PP':
+            $hc_pp += 1;
+            break;
+            case 'SP':
+            $hc_sp += 1;
+            break;
+            default:
+            $hc_lbr = mt_rand(6,7);
+            break;
           }
         }
-        echo "</tr>";
+
+        if ($hc_p1 != 2) $hc_hari += 1;
+        if ($hc_s1 != 2) $hc_hari += 1;
+        if ($hc_m1 != 1) $hc_hari += 1;
+        if ($hc_p2 != 2) $hc_hari += 1;
+        if ($hc_s2 != 2) $hc_hari += 1;
+        if ($hc_m2 != 1) $hc_hari += 1;
+        if ($hc_pc != 1) $hc_hari += 1;
+        if ($hc_sc != 1) $hc_hari += 1;
+        if ($hc_pp < 2 && $hc_pp > 3) $hc_hari += 1;
+        if ($hc_sp < 1 && $hc_sp > 2) $hc_hari += 1;
+
+        $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
+        $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
+        $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
+        $hc_sp = 0;
       }
-      echo "</table><br/>";
+      array_push($hc_ind, $hc_hari);
+      $hc_jaga = 0;
     }
+    return $hc_ind;
   }
 
   function cetak_individu_biasa($individu) {
@@ -224,40 +211,14 @@ class Hairil 	{
       for ($j=0; $j < $loop_pkd; $j++) {
         echo "<tr>";
         for ($k=0; $k < $loop_hari; $k++) {
-          if ($individu[$i][$j][$k]!= "L") {
+          if ($k != ($loop_hari-1) AND substr($individu[$i][$j][$k], 0, 1)== "M" AND substr($individu[$i][$j][$k+1], 0, 1)== "P") {
+            echo "<td width='25px' align='center' style='background: blue;'>".$individu[$i][$j][$k]."</td>";
+          } elseif ($individu[$i][$j][$k]!= "L") {
             echo "<td width='25px' align='center'>".$individu[$i][$j][$k]."</td>";
           } else {
             echo "<td width='25px' align='center' style='background: red;'>".$individu[$i][$j][$k]."</td>";
           }
-        }
-        echo "</tr>";
-      }
-      echo "</table><br/>";
-    }
-  }
 
-  function cetak_individu_31($individu) {
-    $loop_aja = count($individu); // 5
-    $loop_pkd = count($individu[0]); // 10
-    $loop_hari = count($individu[0][0]); //30
-
-    for ($i=0; $i < $loop_aja; $i++) {
-      echo "<label>Individu ke ".$i;
-      echo "<table border='1' style='border-collapse: collapse;'";
-      for ($j=0; $j < $loop_pkd; $j++) {
-        echo "<tr>";
-        for ($k=0; $k < $loop_hari-1; $k++) {
-          if ($individu[$i][$j][$k]==3 AND $individu[$i][$j][$k+1]==1 ) {
-            echo "<td width='20px' align='center' style='background: red;'>".$individu[$i][$j][$k]."</td>";
-          } elseif ($individu[$i][$j][$k]==0 ) {
-            echo "<td width='20px' align='center' style='background: grey;'>".$individu[$i][$j][$k]."</td>";
-          } else {
-            echo "<td width='20px' align='center'>".$individu[$i][$j][$k]."</td>";
-          }
-
-          if ($k == ($loop_hari-2)) {
-            echo "<td width='20px' align='center'>".$individu[$i][$j][$k+1]."</td>";
-          }
         }
         echo "</tr>";
       }
@@ -301,10 +262,10 @@ class Hairil 	{
   }
 
   // untuk menggabungkan penalti dan meneruskannya ke fungsi fitness
-  function gabung_fitness2($x1, $j_ind) {
+  function gabung_fitness3($x1, $x2, $x3, $j_ind) {
     $fitness = array();
     for ($i=0; $i < $j_ind; $i++) {
-      $a = $x1[$i];
+      $a = $x1[$i] + $x2[$i] + $x3[$i];
       $b = $this->n_fitness($a);
       array_push($fitness, $b);
     }
@@ -340,12 +301,14 @@ class Hairil 	{
   function do_roullete_wheel($new_individu) {
     $new_in				= array();
     $jum_ind 			= count($new_individu);
-    $cekhc        = $this->cek_libur($new_individu); // testing cek libur
-    $fitn         = $this->gabung_fitness2($cekhc, $jum_ind);
+    $x1           = $this->cek_shiftLLS($new_individu); // testing cek libur
+    $x2           = $this->cek_shiftMP($new_individu); // testing cek libur
+    $x3           = $this->cek_shiftHR($new_individu); // testing cek libur
+    // $fitn         = $this->gabung_fitness2($cekhc, $jum_ind);
     // $x1 					= $this->cek_shift31($new_individu);
     // $x2 					= $this->cek_min_jaga($new_individu);
-    // $fit_masing2	= $this->gabung_fitness($x1, $x2, $jum_ind);
-    $prob_m 			= $this->probfit_masing2(array_sum($fitn), $fitn);
+    $fit_masing2	= $this->gabung_fitness3($x1, $x2, $x3, $jum_ind);
+    $prob_m 			= $this->probfit_masing2(array_sum($fit_masing2), $fit_masing2);
     $arr_poin_rw 	= $this->gen_pointer_rw($jum_ind);
     $range				= $this->get_range($prob_m, $jum_ind);
 
@@ -439,7 +402,9 @@ class Hairil 	{
       $isl 								= $selected[$m]; // mengisi $isl dengan value pada array $selected
       // $ran0123 						= mt_rand(0,3);
       $ran0123 						= $this->gen_rand_shift();
-      $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
+      if ($output_array[$isl] != "L") {
+        $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
+      }
       // echo $ran0123." ";
     }
 
@@ -469,9 +434,10 @@ class Hairil 	{
       $new_parent[] = $ind2[$j];
     }
     // mengecek nilai fitness
-    $z1 	= $this->cek_shift31($new_parent);
-    $z2 	= $this->cek_min_jaga($new_parent);
-    $fit3	= $this->gabung_fitness($z1, $z2, count($new_parent));
+    $z1 	= $this->cek_shiftLLS($new_parent);
+    $z2 	= $this->cek_shiftMP($new_parent);
+    $z3 	= $this->cek_shiftHR($new_parent);
+    $fit3	= $this->gabung_fitness3($z1, $z2, $z3, count($new_parent));
 
     arsort($fit3); // mengurutkan fitness terbaik, namun tidak mengubah indexnya
     $xyz = array_slice($fit3, 0, 20, true); // memilih 20 array teratas

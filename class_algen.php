@@ -200,14 +200,15 @@ class Hairil 	{
     return $hc_ind;
   }
 
-  function cetak_individu_biasa($individu) {
-    $loop_aja = count($individu); // 5
+  function cetak_individu_biasa($individu, $loop =0) {
+    // $loop_aja = count($individu); // 5
+    $loop_aja = $loop; // 5
     $loop_pkd = count($individu[0]); // 10
     $loop_hari = count($individu[0][0]); //30
 
     for ($i=0; $i < $loop_aja; $i++) {
       echo "<label>Individu ke ".$i;
-      echo "<table border='1' style='border-collapse: collapse; font:  12px sans-serif;'";
+      echo "<table class='table table-bordered table-condensed'>";
       for ($j=0; $j < $loop_pkd; $j++) {
         echo "<tr>";
         for ($k=0; $k < $loop_hari; $k++) {
@@ -331,7 +332,7 @@ class Hairil 	{
 
   // fungsi untuk memulai crossover (one-point-cut)
   function do_crossover($individu) {
-    $pc = 0.6; // nilai prob crossover 0.6-0.85
+    $pc = 0.75; // nilai prob crossover 0.6-0.85
     $new_ind_co = $individu;
     $bts = count($individu[0][0])-2; // 28
     $individu_co = array();
@@ -389,7 +390,7 @@ class Hairil 	{
 
     $pjg 		= count($output_array); // menghitung panjang array 1 dimensi => 1500
     // echo "panjang kromosom 1d = ".$pjg;
-    $pm 		= round(0.01 * $pjg); // mengkalikan pm dgn 1500 => 15
+    $pm 		= round(0.005 * $pjg); // mengkalikan pm dgn 1500 => 15
 
     for ($l=0; $l < $pm; $l++) {
       $n_ran 			= mt_rand(0, $pjg-1); // membangkitkan nilai random 0-1499

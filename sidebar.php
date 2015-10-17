@@ -21,12 +21,12 @@
         </a>
       </li>
       <li class="treeview">
-        <a href="#">
+        <a href="index.php?page=2">
           <i class="fa fa-users"></i> <span>Master PKD</span>
         </a>
       </li>
       <li>
-        <a href="pages/widgets.html">
+        <a href="index.php?page=3">
           <i class="fa fa-gears"></i> <span>Pengaturan</span>
         </a>
       </li>

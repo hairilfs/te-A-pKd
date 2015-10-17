@@ -16,14 +16,14 @@
   <section class="content">
     <!-- Small boxes (Stat box) -->
     <!-- Widget: user widget style 1 -->
-    <div class="box box-widget widget-user">
+    <div class="box box-widget widget-user-2">
       <!-- Add the bg color to the header using any of the bg-* classes -->
-      <div class="widget-user-header bg-black" style="background: url('./dist/img/url2.jpg') center center;">
+      <div class="widget-user-header bg-black" style="background: url('./dist/img/commuter.jpg') bottom; height: 150px;">
+        <div class="widget-user-image">
+          <img class="img-circle" src="./dist/img/cop-512.png" alt="User Avatar">
+        </div>
         <h3 class="widget-user-username">Admin Panel</h3>
         <h5 class="widget-user-desc">Hello Admin!</h5>
-      </div>
-      <div class="widget-user-image">
-        <img class="img-circle" src="./dist/img/cop-512.png" alt="User Avatar">
       </div>
       <div class="box-footer">
         <div class="row">

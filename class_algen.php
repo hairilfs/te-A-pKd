@@ -6,7 +6,7 @@ class Hairil 	{
 
   function gen_rand_shift() {
     $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
-    // shuffle($a);
+    shuffle($a);
     $random = array_rand($a,1);
 
     return $a[$random];
@@ -17,7 +17,7 @@ class Hairil 	{
     $pkd 	  = array();
     $hari   = array();
     $shift  = array('1','2','3','4','5','L','L');
-    for ($y=0; $y < 20; $y++) { // individu , populasi
+    for ($y=0; $y < 22; $y++) { // individu , populasi
       $key = 0;
       for ($x=0; $x < 22; $x++) { // pkd
         for ($i=0; $i < 31; $i++) { // hari
@@ -132,7 +132,7 @@ class Hairil 	{
     $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
     $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
     $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
-    $hc_sp = 0;
+    $hc_sp = 0;   $hc_lb = 0;
 
     $hc_hari = 0;
     $hc_lbr = 0;
@@ -172,8 +172,8 @@ class Hairil 	{
             case 'SP':
             $hc_sp += 1;
             break;
-            default:
-            $hc_lbr = mt_rand(6,7);
+            case 'L':
+            $hc_lb += 1;
             break;
           }
         }
@@ -192,9 +192,9 @@ class Hairil 	{
         $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
         $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
         $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
-        $hc_sp = 0;
+        $hc_sp = 0;   $hc_lb = 0;
       }
-      array_push($hc_ind, $hc_hari);
+      array_push($hc_ind, ($hc_hari*0.01));
       $hc_jaga = 0;
     }
     return $hc_ind;
@@ -251,28 +251,6 @@ class Hairil 	{
     return $arr_poin_rw;
   }
 
-  // untuk menggabungkan penalti dan meneruskannya ke fungsi fitness
-  function gabung_fitness($x1, $x2, $j_ind) {
-    $fitness = array();
-    for ($i=0; $i < $j_ind; $i++) {
-      $a = $x1[$i] + $x2[$i];
-      $b = $this->n_fitness($a);
-      array_push($fitness, $b);
-    }
-    return $fitness;
-  }
-
-  // untuk menggabungkan penalti dan meneruskannya ke fungsi fitness
-  function gabung_fitness3($x1, $x2, $x3, $j_ind) {
-    $fitness = array();
-    for ($i=0; $i < $j_ind; $i++) {
-      $a = $x1[$i] + $x2[$i] + $x3[$i];
-      $b = $this->n_fitness($a);
-      array_push($fitness, $b);
-    }
-    return $fitness;
-  }
-
   // mendapatkan probabilitas fitness masing-masing individu
   function probfit_masing2($t_fit, $each_fit) {
     $probfit = array();
@@ -298,17 +276,49 @@ class Hairil 	{
     return $range;
   }
 
+  function all_fitness1($individu) {
+    $fitness      = array();
+    $x1           = $this->cek_shiftHR($individu); // testing cek libur
+
+    for ($i=0; $i < count($individu); $i++) {
+      $b = $this->n_fitness($x1[$i]);
+      array_push($fitness, $b);
+    }
+    return $fitness;
+  }
+
+  function all_fitness2($individu) {
+    $fitness      = array();
+    $x1           = $this->cek_shiftLLS($individu); // testing cek libur
+    $x2           = $this->cek_shiftMP($individu); // testing cek libur
+
+    for ($i=0; $i < count($individu); $i++) {
+      $a = $x1[$i] + $x2[$i];
+      $b = $this->n_fitness($a);
+      array_push($fitness, $b);
+    }
+    return $fitness;
+  }
+
+  function all_fitness3($individu) {
+    $fitness      = array();
+    $x1           = $this->cek_shiftLLS($individu); // testing cek libur
+    $x2           = $this->cek_shiftMP($individu); // testing cek libur
+    $x3           = $this->cek_shiftHR($individu); // testing cek libur
+
+    for ($i=0; $i < count($individu); $i++) {
+      $a = $x1[$i] + $x2[$i] + $x3[$i];
+      $b = $this->n_fitness($a);
+      array_push($fitness, $b);
+    }
+    return $fitness;
+  }
+
   // fungsi untuk memulai roulette wheel
   function do_roullete_wheel($new_individu) {
     $new_in				= array();
     $jum_ind 			= count($new_individu);
-    $x1           = $this->cek_shiftLLS($new_individu); // testing cek libur
-    $x2           = $this->cek_shiftMP($new_individu); // testing cek libur
-    $x3           = $this->cek_shiftHR($new_individu); // testing cek libur
-    // $fitn         = $this->gabung_fitness2($cekhc, $jum_ind);
-    // $x1 					= $this->cek_shift31($new_individu);
-    // $x2 					= $this->cek_min_jaga($new_individu);
-    $fit_masing2	= $this->gabung_fitness3($x1, $x2, $x3, $jum_ind);
+    $fit_masing2	= $this->all_fitness3($new_individu);
     $prob_m 			= $this->probfit_masing2(array_sum($fit_masing2), $fit_masing2);
     $arr_poin_rw 	= $this->gen_pointer_rw($jum_ind);
     $range				= $this->get_range($prob_m, $jum_ind);
@@ -338,7 +348,7 @@ class Hairil 	{
     $individu_co = array();
     for ($i=0; $i < count($individu); $i++) {
       $op = $this->random_0_1();
-      if ( $op <= $pc) {
+      if ( $op < $pc) {
         $individu_co[] = $i; //mencari nilai random untuk perbandingan dgn pc
         // echo $i;
       }
@@ -351,7 +361,9 @@ class Hairil 	{
 
     if ($b3 != 1) { // jika yang terpilih hanya 1, maka tidak di crossover
       for ($r=0; $r < $b3; $r++) { // mengulangi sebanyak individu terpilih utk di crossover
-        $tp = mt_rand(0, $bts); // menerapkan batas dari 0 - batas-2 untuk titik potong => (28)
+        $tp1 = mt_rand(1, $bts-1); // menerapkan batas dari 0 - batas-2 untuk titik potong => (28)
+        $tp2 = mt_rand($tp1+1, $bts);
+        $tp3 = $tp2-$tp1;
         // echo $tp." "; // menentukan titik potong index 0-28
         $ind_ke = $individu_co[$r]; // diisi dengan individu terpilih crossover
         if ($r == ($b3-1)) {
@@ -360,9 +372,17 @@ class Hairil 	{
           $ind_next = $individu_co[$r+1];
         }
 
+        // // one-point crossover
+        // for ($k=0; $k < $b2; $k++) {
+        //   $slice = array_slice($individu[$ind_next][$k], $tp1);
+        //   array_splice($new_ind_co[$ind_ke][$k], $tp1, count($new_ind_co[$ind_ke][$k]), $slice);
+        //   // echo $ind_next." ";
+        // }
+
+        // multi-point crossover
         for ($k=0; $k < $b2; $k++) {
-          $slice = array_slice($individu[$ind_next][$k], $tp);
-          array_splice($new_ind_co[$ind_ke][$k], $tp, count($new_ind_co[$ind_ke][$k]), $slice);
+          $slice = array_slice($individu[$ind_next][$k], $tp1, $tp3);
+          array_splice($new_ind_co[$ind_ke][$k], $tp1, $tp3, $slice);
           // echo $ind_next." ";
         }
           // echo $tp." ";
@@ -414,7 +434,7 @@ class Hairil 	{
     $in		 	= count($to2d); // menghitung panjang $to2d => 10
 
     for ($h=0; $h < $in; $h++) {
-      $to3d 				= array_chunk($to2d[$h], 31); // membuat potongan dari 300 gen menjadi msg2 30 pcs
+      $to3d 				= array_chunk($to2d[$h], count($individu[0][0])); // membuat potongan dari 300 gen menjadi msg2 30 pcs
       $new_ind_mu[] = $to3d; // memasukan potongan2 $to3d ke array $new_ind_mu
     }
 
@@ -427,21 +447,20 @@ class Hairil 	{
     $new_parent2 = array();
     $next_new = array();
 
-    for ($i=0; $i < count($ind1); $i++) { // memasukan individu awal ke array baru
-      $new_parent[] = $ind1[$i];
-    }
+    // for ($i=0; $i < count($ind1); $i++) { // memasukan individu awal ke array baru
+    //   $new_parent[] = $ind1[$i];
+    // }
+    //
+    // for ($j=0; $j < count($ind2); $j++) { // memasukan individu selanjutnya ke array baru
+    //   $new_parent[] = $ind2[$j];
+    // }
 
-    for ($j=0; $j < count($ind2); $j++) { // memasukan individu selanjutnya ke array baru
-      $new_parent[] = $ind2[$j];
-    }
+    $new_parent = array_merge($ind1, $ind2);
     // mengecek nilai fitness
-    $z1 	= $this->cek_shiftLLS($new_parent);
-    $z2 	= $this->cek_shiftMP($new_parent);
-    $z3 	= $this->cek_shiftHR($new_parent);
-    $fit3	= $this->gabung_fitness3($z1, $z2, $z3, count($new_parent));
+    $fit3	= $this->all_fitness3($new_parent);
 
     arsort($fit3); // mengurutkan fitness terbaik, namun tidak mengubah indexnya
-    $xyz = array_slice($fit3, 0, 20, true); // memilih 20 array teratas
+    $xyz = array_slice($fit3, 0, count($ind1), true); // memilih 20 array teratas
     foreach ($xyz as $key => $value) {
       $next_new[] = $key;
     }

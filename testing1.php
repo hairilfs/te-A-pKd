@@ -18,7 +18,7 @@
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
                   <li class="active"><a href="#tab_1-1" data-toggle="tab">Tabel Jadwal</a></li>
-                  <li ><a href="#tab_2-2" data-toggle="tab">Grafik Jadwal</a></li>
+                  <li><a href="#tab_2-2" data-toggle="tab">Grafik Jadwal</a></li>
                   <li class="pull-left header"><i class="fa fa-calendar"></i> Jadwal</li>
                 </ul>
                 <div class="tab-content">
@@ -34,16 +34,17 @@
                         $fit_it = array();
                         $y_axis = array();
                         $aa = 0;
-                        $bb = 1;
+                        $bb = 0;
 
                         do {
+                          $bb++;
                           $rw = $saya->do_roullete_wheel($gen_baru);
                           $op = $saya->do_crossover($rw);
                           $gen_now = $saya->do_mutation($op); // melakukan mutasi
                           $gen_update = $saya->do_update_generation($gen_baru, $gen_now);
 
-                          $a3 = $saya->all_fitness2($gen_update);
-                          if ($bb != 0 && ($bb%100 == 0)) {
+                          $a3 = $saya->all_fitness3($gen_update);
+                          if ($bb != 0 && ($bb%50 == 0)) {
                             array_push($fit_it, $a3[0]);
                             array_push($y_axis, $bb);
                           }
@@ -62,8 +63,7 @@
                           // if ($bb != 0 && ($bb%10 = 0)) {
                           //   array_push($y_axis, $bb);
                           // }
-                          $bb++;
-                        } while ($bb<=5000 && $aa != 1);
+                        } while ($bb<1000 && $aa != 1);
                         echo "Generasi ke : ".$bb."<br>";
                         echo "Nilai Fitness : ".$a3[0]."<br>";
                         // echo "<pre>";
@@ -81,7 +81,7 @@
                   </div><!-- /.tab-pane -->
                   <div class="tab-pane " id="tab_2-2">
                     <div class="chart">
-                      <canvas id="lineChart" style="height:400px"></canvas>
+                      <canvas id="lineChart" style="height:420px"></canvas>
                     </div>
                   </div>
                 </div><!-- /.tab-content -->

@@ -1,35 +1,15 @@
 <?php
-for($i=0;$i<=9;$i++){
-  for($j=0;$j<=$i;$j++){
-    echo "*&nbsp;";
-  }
-  echo "<br>";
-}
+  include_once 'class_algen.php';
 
-echo "<br><br>";
+  $cons = new Hairil();
+  $genbaru = $cons->gen_array_ind();
+  $rw = $cons->do_roullete_wheel($genbaru);
+echo "<pre>";
+  // print_r($rw);
+echo "</pre>";
 
-for($i=0;$i<=6;$i++){
-  for($j=6-$i;$j>=0;$j--){
-    if ($j==1 || $j==0) {
-      echo "L&nbsp;";
-    } else {
-      echo "O&nbsp;";
-    }
-
-  }
-  echo "<br>";
-}
-
-$f = 5;
-$g = 10;
-$h = 20;
-
-if ($f < $g) {
-  echo "g lebih besar";
-} elseif ($f < $h) {
-  echo "h lebih besar";
-} elseif ($h > $f) {
-  echo "h lebih besar";
-}
-
+  $cons->cetak_individu_biasa($rw);
+  // $co = $cons->do_crossover($rw);
+  // $gen_now = $cons->do_mutation($co); // melakukan mutasi
+  // $gen_update = $cons->do_update_generation($genbaru, $gen_now);
 ?>

@@ -12,12 +12,42 @@ class Hairil 	{
     return $a[$random];
   }
 
+  function pola($awal_libur=0) {
+    switch ($awal_libur) {
+      case 0:
+        $shift  = array('L','X','X','X','X','X','L');
+        break;
+      case 1:
+        $shift  = array('L','L','X','X','X','X','X');
+        break;
+      case 2:
+        $shift  = array('X','L','L','X','X','X','X');
+        break;
+      case 3:
+        $shift  = array('X','X','L','L','X','X','X');
+        break;
+      case 4:
+        $shift  = array('X','X','X','L','L','X','X');
+        break;
+      case 5:
+        $shift  = array('X','X','X','X','L','L','X');
+        break;
+      case 6:
+        $shift  = array('X','X','X','X','X','L','L');
+        break;
+      default:
+        $shift  = array('X','X','X','X','X','L','L');
+        break;
+    }
+    return $shift;
+  }
+
   function gen_array_ind() {
     $ind 	  = array();
     $pkd 	  = array();
     $hari   = array();
-    $shift  = array('1','2','3','4','5','L','L');
-    for ($y=0; $y < 20; $y++) { // individu , populasi
+    $shift  = $this->pola(6);
+    for ($y=0; $y < 24; $y++) { // individu , populasi
       $key = 0;
       for ($x=0; $x < 22; $x++) { // pkd
         for ($i=0; $i < 31; $i++) { // hari
@@ -39,11 +69,12 @@ class Hairil 	{
       $pkd = array();
     }
     return $ind;
+    $ind = array();
   }
 
   // penalti ini terjadi apabila seorang petugas sudah 2 hari libur dan besok tidak masuk siang
-  function cek_shiftLLS($individu) {
-    $new_ind = $individu;
+  function cek_shiftLLS($new_ind) {
+    // $new_ind = $individu;
     $loop_aja = count($new_ind); // 5
     $loop_pkd = count($new_ind[0]); // 10
     $loop_hari = count($new_ind[0][0]); //30
@@ -54,13 +85,9 @@ class Hairil 	{
       for ($j=0; $j < $loop_pkd; $j++) {
         for ($k=0; $k < $loop_hari-2; $k++) {
           $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
-          if ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S" ) {
-            $hc31 += 1;
-          } elseif ($k == 0 AND substr($new_ind[$i][$j][$k], 0,1)!="S" AND $new_ind[$i][$j][5]=="L") {
-            $hc31 += 1;
-          } elseif ($k == 1 AND substr($new_ind[$i][$j][$k], 0,1)!="S" AND $new_ind[$i][$j][6]=="L") {
-            $hc31 += 1;
-          }
+          if ($k==0 && substr($new_ind[$i][$j][0], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $hc31 += 1;
+          if ($k==1 AND substr($new_ind[$i][$j][1], 0,1)!="S" AND $new_ind[$i][$j][$k+5]=="L") $hc31 += 1;
+          if ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S") $hc31 += 1;
         }
       }
       array_push($hc_ind, $hc31);
@@ -70,8 +97,7 @@ class Hairil 	{
   }
 
   // penalti ini terjadi apabila seorang petugas hari ini masuk malam dan besok masuk pagi
-  function cek_shiftMP($individu) {
-    $new_ind = $individu;
+  function cek_shiftMP($new_ind) {
     $loop_aja = count($new_ind); // 5
     $loop_pkd = count($new_ind[0]); // 10
     $loop_hari = count($new_ind[0][0]); //30
@@ -86,6 +112,9 @@ class Hairil 	{
           if ($kini=="M" AND $esok=="P") {
             $hc31 += 1;
           }
+          if ($kini=="M" AND $esok=="M") {
+            $hc31 += 1;
+          }
         }
       }
       array_push($hc_ind, $hc31);
@@ -95,36 +124,8 @@ class Hairil 	{
   }
 
   // penalti ini terjadi apabila jumlah petugas jaga dalam satu hari kurang dari jumlah yang ditentukan
-  function cek_min_jaga($individu) {
-    $new_ind = $individu;
-    $loop_aja = count($new_ind); // 5
-    $loop_pkd = count($new_ind[0]); // 10
-    $loop_hari = count($new_ind[0][0]); //30
-
-    $hc_min_jaga = 0;
-    $hc_jaga = 0;
+  function cek_shiftHR($new_ind) {
     $hc_ind = array();
-
-    for ($q=0; $q < $loop_aja; $q++) {
-      for ($w=0; $w < $loop_hari; $w++) {
-        for ($e=0; $e < $loop_pkd; $e++) {
-          if ($new_ind[$q][$e][$w]!=0) {
-            $hc_min_jaga += 1;
-          }
-        }
-        if ($hc_min_jaga < 17) {
-          $hc_jaga += 1;
-        }
-        $hc_min_jaga = 0;
-      }
-      array_push($hc_ind, $hc_jaga);
-      $hc_jaga = 0;
-    }
-    return $hc_ind;
-  }
-  // penalti ini terjadi apabila jumlah petugas jaga dalam satu hari kurang dari jumlah yang ditentukan
-  function cek_shiftHR($individu) {
-    $new_ind = $individu;
     $loop_aja = count($new_ind); // 5
     $loop_pkd = count($new_ind[0]); // 10
     $loop_hari = count($new_ind[0][0]); //30
@@ -132,16 +133,13 @@ class Hairil 	{
     $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
     $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
     $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
-    $hc_sp = 0;   $hc_lb = 0;
-
-    $hc_hari = 0;
-    $hc_lbr = 0;
-    $hc_ind = array();
+    $hc_sp = 0;   $hc_lb = 0;   $hc_hari = 0;
 
     for ($q=0; $q < $loop_aja; $q++) {
       for ($w=0; $w < $loop_hari; $w++) {
         for ($e=0; $e < $loop_pkd; $e++) {
-          switch ($new_ind[$q][$e][$w]) {
+          $isi_gen = $new_ind[$q][$e][$w];
+          switch ($isi_gen) {
             case 'P1':
             $hc_p1 += 1;
             break;
@@ -178,23 +176,24 @@ class Hairil 	{
           }
         }
 
-        if ($hc_p1 != 2) $hc_hari += 1;
-        if ($hc_s1 != 2) $hc_hari += 1;
-        if ($hc_m1 != 1) $hc_hari += 1;
-        if ($hc_p2 != 2) $hc_hari += 1;
-        if ($hc_s2 != 2) $hc_hari += 1;
-        if ($hc_m2 != 1) $hc_hari += 1;
-        if ($hc_pc != 1) $hc_hari += 1;
-        if ($hc_sc != 1) $hc_hari += 1;
-        if ($hc_pp <= 2 && $hc_pp >= 3) $hc_hari += 1;
-        if ($hc_sp <= 1 && $hc_sp >= 2) $hc_hari += 1;
+        if ($hc_p1 < 1 || $hc_p1 > 2) $hc_hari += 1;
+        if ($hc_s1 < 1 || $hc_s1 > 2) $hc_hari += 1;
+        if ($hc_m1 < 1 ) $hc_hari += 1;
+        if ($hc_p2 < 1 || $hc_p2 > 2) $hc_hari += 1;
+        if ($hc_s2 < 1 || $hc_s2 > 2) $hc_hari += 1;
+        if ($hc_m2 < 1) $hc_hari += 1;
+        if ($hc_pc < 1) $hc_hari += 1;
+        if ($hc_sc < 1) $hc_hari += 1;
+
+        if ($hc_pp < 2 || $hc_pp > 3) $hc_hari += 1;
+        if ($hc_sp < 1 || $hc_sp > 2) $hc_hari += 1;
 
         $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
         $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
         $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
         $hc_sp = 0;   $hc_lb = 0;
       }
-      array_push($hc_ind, ($hc_hari*0.1));
+      array_push($hc_ind, $hc_hari);
       $hc_hari = 0;
     }
     // print_r($hc_ind);
@@ -203,7 +202,11 @@ class Hairil 	{
 
   function cetak_individu_biasa($individu, $loop =0) {
     // $loop_aja = count($individu); // 5
-    $loop_aja = $loop; // 5
+    if ($loop==0) {
+      $loop_aja = count($individu); // 5
+    } else {
+      $loop_aja = $loop;
+    }
     $loop_pkd = count($individu[0]); // 10
     $loop_hari = count($individu[0][0]); //30
 
@@ -234,41 +237,6 @@ class Hairil 	{
     return $g;
   }
 
-  // untuk mendapatkan pointer acak roullete wheel
-  function gen_pointer_rw($n_rw) {
-    $arr_poin_rw = array();
-    for ($t=0; $t < $n_rw; $t++) {
-      $p =  $this->random_0_1();
-      array_push($arr_poin_rw, $p);
-    }
-    return $arr_poin_rw;
-  }
-
-  // mendapatkan probabilitas fitness masing-masing individu
-  function probfit_masing2($t_fit, $each_fit) {
-    $probfit = array();
-
-    for ($v=0; $v < count($each_fit); $v++) {
-      $c = $each_fit[$v] / $t_fit;
-      $d = round($c, 6);
-      array_push($probfit, $d);
-    }
-    return $probfit;
-  }
-
-  // mendapatkan jarak untuk dilanjutkan ke roulette wheel
-  function get_range($prob_m, $jum_ind) {
-    $range = array();
-    for ($i=0; $i < $jum_ind; $i++) {
-      if ($i == 0) {
-        $range[0] = $prob_m[0];
-      } else {
-        $range[$i] = $range[$i-1] + $prob_m[$i];
-      }
-    }
-    return $range;
-  }
-
   // untuk mencari nilai fitness
   function n_fitness($hc) {
     $a = 1+($hc);
@@ -279,7 +247,7 @@ class Hairil 	{
 
   function all_fitness1($individu) {
     $fitness      = array();
-    $x1           = $this->cek_shiftHR($individu); // testing cek libur
+    $x1           = $this->cek_shiftHR($individu); // cek harian
 
     for ($i=0; $i < count($individu); $i++) {
       $b = $this->n_fitness($x1[$i]);
@@ -290,8 +258,8 @@ class Hairil 	{
 
   function all_fitness2($individu) {
     $fitness      = array();
-    $x1           = $this->cek_shiftLLS($individu); // testing cek libur
-    $x2           = $this->cek_shiftMP($individu); // testing cek libur
+    $x1           = $this->cek_shiftLLS($individu); // cek libur libur siang
+    $x2           = $this->cek_shiftMP($individu); // cek malam pagi
 
     for ($i=0; $i < count($individu); $i++) {
       $a = $x1[$i] + $x2[$i];
@@ -318,22 +286,46 @@ class Hairil 	{
   // fungsi untuk memulai roulette wheel
   function do_roullete_wheel($new_individu) {
     $new_in				= array();
+    $new_poin			= array();
+    $probfit      = array();
+    $arr_poin_rw  = array();
+    $range        = array();
     $jum_ind 			= count($new_individu);
     $fit_masing2	= $this->all_fitness3($new_individu);
-    $prob_m 			= $this->probfit_masing2(array_sum($fit_masing2), $fit_masing2);
-    $arr_poin_rw 	= $this->gen_pointer_rw($jum_ind);
-    $range				= $this->get_range($prob_m, $jum_ind);
+    $tot_fit      = array_sum($fit_masing2);
+
+    for ($i=0; $i < $jum_ind; $i++) {
+      // prob fit tiap individu
+      $c = $fit_masing2[$i] / $tot_fit;
+      $d = round($c, 6);
+      array_push($probfit, $d);
+
+      // get pointer
+      $p =  $this->random_0_1();
+      array_push($arr_poin_rw, $p);
+
+      // get range
+      if ($i==0) {
+        $range[0] = $probfit[0];
+      } else {
+        $range[$i] = $range[$i-1] + $probfit[$i];
+      }
+    }
 
     // print_r($arr_poin_rw);
     // echo "<br/>";
     // print_r($range);
     // echo "<br/>";
+
     // menempatkan pointer
     for ($j=0; $j < $jum_ind; $j++) {
       for ($k=0; $k < $jum_ind; $k++) {
         if ($arr_poin_rw[$j] <= $range[$k]) {
-          $new_in[$j] = $new_individu[$k];
-          // echo $k;
+          if (!in_array($k, $new_poin)) {
+            array_push($new_poin, $k);
+            $new_in[] = $new_individu[$k];
+            // echo $k;
+          }
           break;
         }
       }
@@ -343,14 +335,12 @@ class Hairil 	{
 
   // fungsi untuk memulai crossover
   function do_crossover($individu) {
-    $pc = 0.81; // nilai prob crossover 0.6-0.85
+    $pc = 0.72; // nilai prob crossover 0.6-0.85
     $new_ind_co = $individu;
-    // $new_ind_co2 = $individu;
 
     $bts = count($individu[0][0])-2; // 28
     $individu_co = array();
-    $a = array();
-    $b = array();
+
     for ($i=0; $i < count($individu); $i++) {
       $op = $this->random_0_1();
       if ( $op < $pc) {
@@ -359,12 +349,10 @@ class Hairil 	{
       }
       // echo $op." "; // cetak random prob mutasi
     }
-    $a = array_unique($individu_co);
-    $b = array_values($a);
     // print_r($individu_co); // menentukan individu mana saja yang akan dikawinsilangkan
 
     $b2 = count($individu[0]); // 23
-    $b3 = count($b); // tak tentu
+    $b3 = count($individu_co); // tak tentu
 
     if ($b3 != 1) { // jika yang terpilih hanya 1, maka tidak di crossover
       for ($r=0; $r < $b3; $r++) { // mengulangi sebanyak individu terpilih utk di crossover
@@ -372,11 +360,11 @@ class Hairil 	{
         $tp2 = mt_rand($tp1+1, $bts);
         $tp3 = $tp2-$tp1;
         // echo $tp." "; // menentukan titik potong index 0-28
-        $ind_ke = $b[$r]; // diisi dengan individu terpilih crossover
+        $ind_ke = $individu_co[$r]; // diisi dengan individu terpilih crossover
         if ($r == ($b3-1)) {
-          $ind_next = $b[0];
+          $ind_next = $individu_co[0];
         } else {
-          $ind_next = $b[$r+1];
+          $ind_next = $individu_co[$r+1];
         }
 
         // one-point crossover
@@ -386,17 +374,13 @@ class Hairil 	{
         //
         //   // $slice2 = array_slice($individu[$ind_ke][$k], $tp1);
         //   // array_splice($new_ind_co2[$ind_next][$k], $tp1, count($new_ind_co2[$ind_next][$k]), $slice);
-        //
-        //   // echo $ind_next." ";
         // }
 
         // multi-point crossover
         for ($k=0; $k < $b2; $k++) {
           $slice = array_slice($individu[$ind_next][$k], $tp1, $tp3);
           array_splice($new_ind_co[$ind_ke][$k], $tp1, $tp3, $slice);
-          // echo $ind_next." ";
         }
-          // echo $tp." ";
       }
     }
     $individu = array();
@@ -419,21 +403,18 @@ class Hairil 	{
     }
 
     $pjg 		= count($output_array); // menghitung panjang array 1 dimensi => 1500
-    // echo "panjang kromosom 1d = ".$pjg;
     $pm 		= round(0.006 * $pjg); // mengkalikan pm dgn 1500 => 15
 
     for ($l=0; $l < $pm; $l++) {
       $n_ran 			= mt_rand(0, $pjg-1); // membangkitkan nilai random 0-1499
       $selected[] = $n_ran; // memasukkan gen-gen terpilih ke array $selected
     }
-
     // print_r($selected);
 
     for ($m=0; $m < count($selected); $m++) {
-      $isl 								= $selected[$m]; // mengisi $isl dengan value pada array $selected
-      // $ran0123 						= mt_rand(0,3);
-      $ran0123 						= $this->gen_rand_shift();
+      $isl  = $selected[$m]; // mengisi $isl dengan value pada array $selected
       if ($output_array[$isl] != "L") {
+        $ran0123 						= $this->gen_rand_shift();
         $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
       }
       // echo $ran0123." ";
@@ -447,7 +428,6 @@ class Hairil 	{
       $to3d 				= array_chunk($to2d[$h], count($individu[0][0])); // membuat potongan dari 300 gen menjadi msg2 30 pcs
       $new_ind_mu[] = $to3d; // memasukan potongan2 $to3d ke array $new_ind_mu
     }
-
     // print_r($new_ind_mu);
     return $new_ind_mu;
   }
@@ -456,21 +436,13 @@ class Hairil 	{
     $new_parent = array();
     $new_parent2 = array();
     $next_new = array();
-
-    // for ($i=0; $i < count($ind1); $i++) { // memasukan individu awal ke array baru
-    //   $new_parent[] = $ind1[$i];
-    // }
-    //
-    // for ($j=0; $j < count($ind2); $j++) { // memasukan individu selanjutnya ke array baru
-    //   $new_parent[] = $ind2[$j];
-    // }
-
+    // menggabungkan array
     $new_parent = array_merge($ind1, $ind2);
     // mengecek nilai fitness
     $fit3	= $this->all_fitness3($new_parent);
 
     arsort($fit3); // mengurutkan fitness terbaik, namun tidak mengubah indexnya
-    $xyz = array_slice($fit3, 0, 20, true); // memilih 20 array teratas
+    $xyz = array_slice($fit3, 0, 24, true); // memilih 20 array teratas
     foreach ($xyz as $key => $value) {
       $next_new[] = $key;
     }
@@ -479,7 +451,6 @@ class Hairil 	{
     for ($k=0; $k < $c_next; $k++) { // memasukkan 20 array teratas berdasarkan fitnessnya
       $new_parent2[] = $new_parent[$next_new[$k]];
     }
-
     return $new_parent2;
   }
 

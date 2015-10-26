@@ -21,7 +21,7 @@
 // array_splice($arr1, $r1, $r3, $slice); // mengganti ratna dan mardi dengan abdul dan edo
 // print_r($arr1);
 $start = microtime(true);
-$a = array(1,2,2,2,3,4,5,6,6,7);
+$a = array(1,2,3);
 $b = array_unique($a);
 $c = array_values($b);
 echo "<pre>";
@@ -29,6 +29,31 @@ print_r(array_values($c));
 echo "</pre>";
 $end = microtime(true);
 $time = number_format(($end - $start), 6);
+date_default_timezone_set("Asia/Jakarta");
+echo date("H:i:s");
+
+$oke = 20;
+if ($oke < 20 or $oke > 21) {
+  echo "cant!<br>";
+}
+
+$oke2 = 19;
+if ($oke2 != 20) {
+  echo "wait!<br>";
+}
+
+if(in_array(2, $a)) {
+  echo "ada";
+}
+
+function asd() {
+  $anu = "anu deh";
+}
+
+$key = array_search('2', $a);
+echo "<br> $key <br>";
+// echo "<br>".a()." <br>";
+echo asd();
 
 echo 'This page loaded in ', $time, ' seconds  ';
 ?>

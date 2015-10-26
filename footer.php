@@ -14,7 +14,7 @@ immediately after the control sidebar -->
 <!-- jQuery 2.1.4 -->
 <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script> -->
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <!-- <script>
 $.widget.bridge('uibutton', $.ui.button);
@@ -43,8 +43,15 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="dist/js/demo.js"></script>
 <!-- page script -->
 <script>
+$("#yosh").click(function(){
+  $("#bloading").after("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+});
+</script>
+
+<script>
 $(function(){
   $('#table-pkd').DataTable();
+  $('#table-aturan').DataTable();
 });
 </script>
 

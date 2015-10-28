@@ -67,7 +67,7 @@ $(function(){
         // labels: ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [
           {
-            label: "Digital Goods",
+            label: "Nilai Fitness",
             fillColor: "rgba(60,141,188,0.9)",
             strokeColor: "rgba(60,141,188,0.8)",
             pointColor: "#3b8bba",

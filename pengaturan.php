@@ -22,25 +22,25 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Populasi</label>
                 <div class="col-sm-10">
-                  <input type="number" class="form-control" name="pop" placeholder="Populasi">
+                  <input type="number" min="1" class="form-control" name="pop" placeholder="Populasi" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Generasi</label>
                 <div class="col-sm-10">
-                  <input type="number" class="form-control" name="gen" placeholder="Generasi">
+                  <input type="number" min="1" class="form-control" name="gen" placeholder="Generasi" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Pc</label>
                 <div class="col-sm-10">
-                  <input type="number" step="any" class="form-control" name="pc" placeholder="Prob. Crossover">
+                  <input type="number" step="any" min="0.5" max="1" class="form-control" name="pc" placeholder="Prob. Crossover" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Pm</label>
                 <div class="col-sm-10">
-                  <input type="number" step="any" class="form-control" name="pm" placeholder="Prob. Mutasi">
+                  <input type="number" step="any" min="0.001" max="0.1" class="form-control" name="pm" placeholder="Prob. Mutasi" required>
                 </div>
               </div>
               <div class="form-group">
@@ -85,7 +85,6 @@
                 </thead>
                 <tbody>
                   <?php
-                  $mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
                   $no = 1;
                   $res = $mysqli->query("SELECT * FROM pengaturan");
                   while ($row = $res->fetch_object()) { ?>
@@ -117,19 +116,19 @@
                               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
                               <div class="form-group">
                                 <label>Populasi</label>
-                                <input type="number" class="form-control" name="pop" value="<?php echo $row->populasi; ?>">
+                                <input type="number" min="1" class="form-control" name="pop" value="<?php echo $row->populasi; ?>" required>
                               </div>
                               <div class="form-group">
                                 <label>Generasi</label>
-                                <input type="number" class="form-control" name="gen" value="<?php echo $row->generasi; ?>">
+                                <input type="number" min="1" class="form-control" name="gen" value="<?php echo $row->generasi; ?>" required>
                               </div>
                               <div class="form-group">
                                 <label>Pc</label>
-                                <input type="number" step="any" class="form-control" name="pc" value="<?php echo $row->pc; ?>">
+                                <input type="number" step="any" min="0.5" max="1" class="form-control" name="pc" value="<?php echo $row->pc; ?>" required>
                               </div>
                               <div class="form-group">
                                 <label>Pm</label>
-                                <input type="number" step="any" class="form-control" name="pm" value="<?php echo $row->pm; ?>">
+                                <input type="number" step="any" min="0.001" max="0.1" class="form-control" name="pm" value="<?php echo $row->pm; ?>" required>
                               </div>
                             </div>
                             <div class="modal-footer">

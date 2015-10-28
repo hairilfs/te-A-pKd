@@ -3,7 +3,7 @@ $content = 0;
 $content = $_GET['page'];
 include("header.php");
 include("sidebar.php");
-
+$mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
 switch ($content) {
   case 1:
   include("gen_jadwal.php");

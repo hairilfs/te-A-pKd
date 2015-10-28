@@ -22,13 +22,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">NIK</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="nik" placeholder="NIK">
+                  <input type="text" class="form-control" name="nik" placeholder="NIK" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Nama</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama" required>
                 </div>
               </div>
               <div class="form-group">
@@ -71,7 +71,6 @@
                 </thead>
                 <tbody>
                   <?php
-                  $mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
                   $no = 1;
                   $res = $mysqli->query("SELECT * FROM pkd");
                   while ($row = $res->fetch_object()) { ?>
@@ -100,11 +99,11 @@
                               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
                               <div class="form-group">
                                 <label>NIK</label>
-                                <input type="text" class="form-control" name="nik" value="<?php echo $row->nik; ?>">
+                                <input type="text" class="form-control" name="nik" value="<?php echo $row->nik; ?>" required>
                               </div>
                               <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control" name="nama" value="<?php echo $row->nama; ?>">
+                                <input type="text" class="form-control" name="nama" value="<?php echo $row->nama; ?>" required>
                               </div>
                               <label>Jabatan</label>
                               <div class="form-group">

@@ -24,13 +24,20 @@
       <div class="tab-content">
         <div class="tab-pane active" id="tab_1-1">
           <?php
-          set_time_limit(0);
           date_default_timezone_set("Asia/Jakarta");
           $now = date("H:i:s");
           $start = microtime(true);
+          set_time_limit(0);
+          $res = $mysqli->query("SELECT generasi as g FROM pengaturan WHERE status=1");
+          $generasi = $res->fetch_object();
+          if (isset($_POST['genjad'])) {
+            $bln = $_POST['selbulan'];
+            $thn = $_POST['seltahun'];
+          }
+
           include_once("class_algen.php");
           $saya = new Hairil();
-
+          $saya->awal($bln, $thn);
           $gen_baru = $saya->gen_array_ind();
           $gen_now = array();
           $fit_it = array();
@@ -38,13 +45,13 @@
           $aa = 0;
           $bb = 0;
 
-          while ($bb<=5000 && $aa != 1) {
+          while ($bb<=$generasi->g && $aa != 1) {
             $rw = $saya->do_roullete_wheel($gen_baru);
             $co = $saya->do_crossover($rw);
             $gen_now = $saya->do_mutation($co); // melakukan mutasi
             $gen_update = $saya->do_update_generation($gen_baru, $gen_now);
 
-            $a3 = $saya->all_fitness3($gen_update);
+            $a3 = $saya->all_fitness2($gen_update);
 
             for ($j=0; $j < count($gen_update); $j++) {
               if ($a3[$j] == 1) {
@@ -55,7 +62,7 @@
               }
             }
 
-              if ($bb%100 == 0) {
+              if ($bb%10 == 0) {
                 array_push($fit_it, $a3[0]);
                 array_push($y_axis, $bb);
               }
@@ -63,7 +70,7 @@
             $gen_baru = array();
             $gen_baru = $gen_update;
           }
-          echo "Generasi ke : ".($bb-1)."<br>";
+          echo "Generasi ke : ".($bb-1)." || ";
           echo "Nilai Fitness : ".$a3[0]."<br>";
 
           $saya->cetak_individu_biasa($gen_baru, 1);

@@ -8,8 +8,6 @@ class Hairil 	{
   public $jml_hari;
   public $pc;
   public $pm;
-  public $bulan_x;
-  public $tahun_x;
 
   function awal($bln, $thn) {
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
@@ -23,51 +21,12 @@ class Hairil 	{
     $this->jml_hari = cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
     $this->pc       = $q_res_a->pc;
     $this->pm       = $q_res_a->pm;
-    $this->bulan_x  = $bln;
-    $this->tahun_x  = $thn;
-  }
 
-  function cetak_bulan($angka) {
-    $bulan = "";
-    switch ($angka) {
-      case 1:
-        $bulan = "Januari";
-        break;
-      case 2:
-        $bulan = "Februari";
-        break;
-      case 3:
-        $bulan = "Maret";
-        break;
-      case 4:
-        $bulan = "April";
-        break;
-      case 5:
-        $bulan = "Mei";
-        break;
-      case 6:
-        $bulan = "Juni";
-        break;
-      case 7:
-        $bulan = "Juli";
-        break;
-      case 8:
-        $bulan = "Agustus";
-        break;
-      case 9:
-        $bulan = "September";
-        break;
-      case 10:
-        $bulan = "Oktober";
-        break;
-      case 11:
-        $bulan = "November";
-        break;
-      case 12:
-        $bulan = "Desember";
-        break;
-    }
-    return $bulan;
+    // echo $this->jml_ind." ";
+    // echo $this->jml_pkd." ";
+    // echo $this->jml_hari." ";
+    // echo $this->pc." ";
+    // echo $this->pm." ";
   }
 
   function gen_rand_shift() {
@@ -112,38 +71,22 @@ class Hairil 	{
     $ind 	  = array();
     $pkd 	  = array();
     $hari   = array();
-    $shift  = $this->pola(3);
-    // penentuan pola harian
-    switch ($this->jml_hari) {
-      case 31:
-      $selisih=2;
-      break;
-      case 30:
-      $selisih=1;
-      break;
-      case 29:
-      $selisih=0;
-      break;
-    }
-
+    $shift  = $this->pola(6);
     for ($y=0; $y < $this->jml_ind; $y++) { // individu , populasi
       $key = 0;
       for ($x=0; $x < $this->jml_pkd; $x++) { // pkd
         for ($i=0; $i < $this->jml_hari; $i++) { // hari
-          if ($shift[$key] == "L") $acak2 = "L";
-          else $acak2 = $this->gen_rand_shift();
+          if ($shift[$key] == "L") {
+            $acak2 = "L";
+          } else {
+            $acak2 = $this->gen_rand_shift();
+          }
           array_push($hari, $acak2);
           $key++;
           if ($key>=count($shift)) $key = 0;
         }
-        // jika bulannya bukan februari tahun kabisat
-        if ($this->jml_hari!=28) {
-          if ($key-$selisih < 0) $key = count($shift) + $key - $selisih;
-          else $key = $key - $selisih;
-        } else {
-          if ($key >= count($shift)-1) $key = 0;
-          else $key = $key + 1;
-        }
+        if ($key-2 <0) $key = count($shift) + $key - 2;
+        else $key = $key - 2;
         array_push($pkd, $hari);
         $hari = array();
       }
@@ -156,11 +99,15 @@ class Hairil 	{
 
   // penalti ini terjadi apabila seorang petugas sudah 2 hari libur dan besok tidak masuk siang
   function cek_shiftLLS($new_ind) {
+    // $new_ind = $individu;
+    // $loop_aja = count($new_ind); // 5
+    // $loop_pkd = count($new_ind[0]); // 10
+    // $loop_hari = count($new_ind[0][0]); //30
     $pnl= 0;
     $hc_ind = array();
-    for ($i=0; $i < count($new_ind); $i++) {
-      for ($j=0; $j < count($new_ind[0]); $j++) {
-        for ($k=0; $k < count($new_ind[0][0])-2; $k++) {
+    for ($i=0; $i < $this->jml_ind; $i++) {
+      for ($j=0; $j < $this->jml_pkd; $j++) {
+        for ($k=0; $k < $this->jml_hari-2; $k++) {
           $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
           if ($k==0 && substr($new_ind[$i][$j][0], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
           if ($k==1 AND substr($new_ind[$i][$j][1], 0,1)!="S" AND $new_ind[$i][$j][$k+5]=="L") $pnl += 1;
@@ -175,11 +122,15 @@ class Hairil 	{
 
   // penalti ini terjadi apabila seorang petugas hari ini masuk malam dan besok masuk pagi
   function cek_shiftMP($new_ind) {
+    // $loop_aja = count($new_ind); // 5
+    // $loop_pkd = count($new_ind[0]); // 10
+    // $loop_hari = count($new_ind[0][0]); //30
+
     $pnl = 0;
     $hc_ind = array();
-    for ($i=0; $i < count($new_ind); $i++) {
-      for ($j=0; $j < count($new_ind[0]); $j++) {
-        for ($k=0; $k < count($new_ind[0][0])-1; $k++) {
+    for ($i=0; $i < $this->jml_ind; $i++) {
+      for ($j=0; $j < $this->jml_pkd; $j++) {
+        for ($k=0; $k < $this->jml_hari-1; $k++) {
           $kini = substr($new_ind[$i][$j][$k], 0,1);
           $esok = substr($new_ind[$i][$j][$k+1], 0,1);
           if ($kini=="M" AND $esok=="P") {
@@ -199,14 +150,18 @@ class Hairil 	{
   // penalti ini terjadi apabila jumlah petugas jaga dalam satu hari kurang dari jumlah yang ditentukan
   function cek_shiftHR($new_ind) {
     $hc_ind = array();
+    // $loop_aja = count($new_ind); // 5
+    // $loop_pkd = count($new_ind[0]); // 10
+    // $loop_hari = count($new_ind[0][0]); //30
+
     $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
     $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
     $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
     $hc_sp = 0;   $hc_lb = 0;   $hc_hari = 0;
 
-    for ($q=0; $q < count($new_ind); $q++) {
-      for ($w=0; $w < count($new_ind[0][0]); $w++) {
-        for ($e=0; $e < count($new_ind[0]); $e++) {
+    for ($q=0; $q < $this->jml_ind; $q++) {
+      for ($w=0; $w < $this->jml_hari; $w++) {
+        for ($e=0; $e < $this->jml_pkd; $e++) {
           $isi_gen = $new_ind[$q][$e][$w];
           switch ($isi_gen) {
             case 'P1':
@@ -270,46 +225,33 @@ class Hairil 	{
   }
 
   function cetak_individu_biasa($individu, $loop =0) {
-    $namapkd = array();
-    $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
-    $res = $mysqli->query("SELECT * FROM pkd WHERE jabatan='ANGGOTA'");
-    while ($listpkd = $res->fetch_object()) {
-      array_push($namapkd, $listpkd->nama);
+    // $loop_aja = count($individu); // 5
+    if ($loop==0) {
+      $loop_aja = count($individu); // 5
+    } else {
+      $loop_aja = $loop;
     }
-
-    if ($loop==0) $loop_aja = count($individu); // 5
-    else $loop_aja = $loop;
-    $loop_pkd = count($individu[0]); // 10
-    $loop_hari = count($individu[0][0]); //30
+    // $loop_pkd = count($individu[0]); // 10
+    // $loop_hari = count($individu[0][0]); //30
 
     for ($i=0; $i < $loop_aja; $i++) {
-      echo "<label>Individu ke ".$i."</label>";
-      echo "<div class='table-responsive'>\n<table class='table table-bordered table-condensed'>";
-      echo "<tr>\n<td valign='middle' align='center' rowspan='2'>No.</td>\n<td valign='middle' align='center' rowspan='2'>Nama</td>\n";
-      echo "<td colspan='$this->jml_hari' align='center'>".$this->cetak_bulan($this->bulan_x)." ".$this->tahun_x."</td>";
-      echo "</tr><tr>";
-      for ($t=1; $t <=$this->jml_hari ; $t++) {
-        echo "<td align='center'>".$t."</td>";
-      }
-      echo "</tr>";
-      for ($j=0; $j < $loop_pkd; $j++) {
+      echo "<label>Individu ke ".$i;
+      echo "<table class='table table-bordered table-condensed'>";
+      for ($j=0; $j < $this->jml_pkd; $j++) {
         echo "<tr>";
-        echo "<td align='center'>".($j+1)."</td>";
-        echo "<td>".$namapkd[$j]."</td>";
-        for ($k=0; $k < $loop_hari; $k++) {
-          if ($k != ($loop_hari-1) AND substr($individu[$i][$j][$k], 0, 1)== "M" AND substr($individu[$i][$j][$k+1], 0, 1)== "P") {
-            echo "<td align='center' style='background: blue;'>".$individu[$i][$j][$k]."</td>";
-          } elseif ($k >= 2 && $individu[$i][$j][$k-2]=="L" AND $individu[$i][$j][$k-1]=="L" AND substr($individu[$i][$j][$k], 0, 1)!="S") {
-            echo "<td align='center' style='background: yellow;'>".$individu[$i][$j][$k]."</td>";
+        for ($k=0; $k < $this->jml_hari; $k++) {
+          if ($k != ($this->jml_hari-1) AND substr($individu[$i][$j][$k], 0, 1)== "M" AND substr($individu[$i][$j][$k+1], 0, 1)== "P") {
+            echo "<td width='25px' align='center' style='background: blue;'>".$individu[$i][$j][$k]."</td>";
           } elseif ($individu[$i][$j][$k]!= "L") {
-            echo "<td align='center'>".$individu[$i][$j][$k]."</td>";
+            echo "<td width='25px' align='center'>".$individu[$i][$j][$k]."</td>";
           } else {
-            echo "<td align='center' style='background: red;'>".$individu[$i][$j][$k]."</td>";
+            echo "<td width='25px' align='center' style='background: red;'>".$individu[$i][$j][$k]."</td>";
           }
+
         }
         echo "</tr>";
       }
-      echo "</table>\n</div>";
+      echo "</table><br/>";
     }
   }
 
@@ -343,7 +285,7 @@ class Hairil 	{
     $x1           = $this->cek_shiftLLS($individu); // cek libur libur siang
     $x2           = $this->cek_shiftMP($individu); // cek malam pagi
     // echo count($individu)." ";
-    for ($i=0; $i < count($individu); $i++) {
+    for ($i=0; $i < $this->jml_ind; $i++) {
       $a = $x1[$i] + $x2[$i];
       $b = $this->n_fitness($a);
       array_push($fitness, $b);
@@ -452,9 +394,9 @@ class Hairil 	{
         for ($k=0; $k < $b2; $k++) {
           $slice = array_slice($individu[$ind_next][$k], $tp1);
           array_splice($new_ind_co[$ind_ke][$k], $tp1, count($new_ind_co[$ind_ke][$k]), $slice);
-          //
-          //   // $slice2 = array_slice($individu[$ind_ke][$k], $tp1);
-          //   // array_splice($new_ind_co2[$ind_next][$k], $tp1, count($new_ind_co2[$ind_next][$k]), $slice);
+        //
+        //   // $slice2 = array_slice($individu[$ind_ke][$k], $tp1);
+        //   // array_splice($new_ind_co2[$ind_next][$k], $tp1, count($new_ind_co2[$ind_next][$k]), $slice);
         }
 
         // multi-point crossover
@@ -522,8 +464,7 @@ class Hairil 	{
     $fit3	= $this->all_fitness2($new_parent);
 
     arsort($fit3); // mengurutkan fitness terbaik, namun tidak mengubah indexnya
-    $the_in = $this->jml_ind;
-    $xyz = array_slice($fit3, 0, $the_in, true); // memilih 20 array teratas
+    $xyz = array_slice($fit3, 0, $this->jml_ind, true); // memilih 20 array teratas
     foreach ($xyz as $key => $value) {
       $next_new[] = $key;
     }

@@ -5,11 +5,11 @@
   <title></title>
   <style>
   td {
-    padding: 3px;
-    min-width: 20px;
+    padding: 4px;
+    /*min-width: 20px;*/
     line-height: 20px;
     text-align: center;
-    font: 11px Tahoma;
+    font: 12px Tahoma;
   }
   td.red {
     background: red;
@@ -20,7 +20,7 @@
 <body>
 
   <?php
-  $column = 31;
+  $column = 28;
   $row = 22;
   $code = array('S2','PC','P2','SP','M2','L','L'); // 7
 
@@ -49,7 +49,7 @@
   {
     echo "<tr>\n<td>$r</td>\n";
 
-    for ($c=1; $c<=$column; $c++)
+    for ($y=1; $y<=$column; $y++)
     {
       echo "<td";
       if ($code[$key]=="L") {
@@ -62,12 +62,14 @@
       $key++;
       if ($key>=count($code)) $key = 0;
     }
-    // if ($key-2 <0) $key = count($code) + $key - 2;
-    // else $key = $key - 2;
+    if ($key >= count($code)-1) $key = 0;
+    else $key = $key + 1;
+    // $key = $key + 1;
     echo "</tr>\n";
   }
 
   echo "</table>";
+  echo $key;
   ?>
 
   </body>

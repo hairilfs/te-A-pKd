@@ -35,8 +35,8 @@
           </div><!-- /.col -->
           <div class="col-sm-4 border-right">
             <div class="description-block">
-              <h5 class="description-header">Welcome to OpaL-PKD</h5>
-              <span class="description-text">Now, you can make a new great schedule ever!</span>
+              <h5 class="description-header">Selamat datang di OpaL-PKD</h5>
+              <span class="description-text">Optimasi Jadwal Petugas Keamanan Dalam (PKD) - St. Sudimara</span>
             </div><!-- /.description-block -->
           </div><!-- /.col -->
           <div class="col-sm-4">

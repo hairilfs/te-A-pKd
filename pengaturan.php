@@ -67,7 +67,7 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSetting"><i class="fa fa-tasks"></i> Buat Baru</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSetting"><i class="fa fa-cogs"></i> Buat Baru</button>
           </div><!-- /.box-header -->
           <div class="box-body">
             <div class="table-responsive">

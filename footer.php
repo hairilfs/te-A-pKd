@@ -24,13 +24,6 @@ $.widget.bridge('uibutton', $.ui.button);
 <!-- DataTables -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
-<!-- Sparkline -->
-<!-- <script src="plugins/sparkline/jquery.sparkline.min.js"></script> -->
-<!-- jQuery Knob Chart -->
-<!-- <script src="plugins/knob/jquery.knob.js"></script> -->
-<!-- daterangepicker -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script> -->
-<!-- <script src="plugins/daterangepicker/daterangepicker.js"></script> -->
 <!-- ChartJS 1.0.1 -->
 <script src="plugins/chartjs/Chart.min.js"></script>
 <!-- Slimscroll -->

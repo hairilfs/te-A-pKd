@@ -20,7 +20,7 @@
           </div><!-- /.box-header -->
           <!-- form start -->
           <div class="box-body">
-            <form class="form-horizontal" action="index.php?page=5" method="post">
+            <form class="form-horizontal" action="main.php?page=5" method="post">
               <div class="form-group">
                 <label class="col-sm-2 control-label">Bulan</label>
                 <div class="col-sm-10">
@@ -50,11 +50,11 @@
                   </select>
                 </div>
               </div>
+            </div><!-- /.box-body -->
+            <div id="bloading" class="box-footer">
               <button id="yosh" type="submit" class="btn btn-info pull-right" name="genjad">Buat!</button>
-            </form>
-          </div><!-- /.box-body -->
-          <div id="bloading" class="box-footer">
-          </div><!-- /.box-footer -->
+            </div><!-- /.box-footer -->
+          </form>
         </div><!-- /.box -->
       </div>
     </section><!-- /.content -->

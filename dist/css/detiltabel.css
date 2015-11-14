@@ -1,0 +1,12 @@
+table {
+	font-size: 10px;
+	font-family: 'Tahoma', 'Verdana', 'Trebuchet MS';
+	border-collapse: collapse;
+	border-color: black;
+	text-align: center;
+	
+}
+
+table, td {
+	padding: 3.5px;
+}

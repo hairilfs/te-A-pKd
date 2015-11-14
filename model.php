@@ -16,7 +16,7 @@
 
   // insert pkd
   if (isset($_POST['savepkd'])) {
-    $res = $mysqli->query("INSERT INTO pkd(nik,nama,jabatan) VALUES('$_POST[nik]', '$_POST[nama]', '$_POST[optjab]')");
+    $res = $mysqli->query("INSERT INTO pkd(nik,nama,jabatan, status) VALUES('$_POST[nik]', '$_POST[nama]', '$_POST[optjab]', '$_POST[optstat]')");
     if ($res) {
       header("Location: main.php?page=2");
     } else {
@@ -37,7 +37,7 @@
 
   // edit pkd
   if (isset($_POST['editpkd'])) {
-    $res = $mysqli->query("UPDATE pkd SET nik='$_POST[nik]', nama='$_POST[nama]', jabatan='$_POST[optjab]' WHERE id='$_POST[id]'");
+    $res = $mysqli->query("UPDATE pkd SET nik='$_POST[nik]', nama='$_POST[nama]', jabatan='$_POST[optjab]', status='$_POST[optstat]' WHERE id='$_POST[id]'");
     if ($res) {
       header("Location: main.php?page=2");
     } else {

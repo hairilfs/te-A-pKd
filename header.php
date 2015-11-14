@@ -15,7 +15,7 @@
   <!-- sweetalert2 -->
   <link rel="stylesheet" href="dist/css/sweetalert2.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.css">
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
   folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
@@ -41,6 +41,17 @@
       padding: 0 !important;
       margin: 0 !important;
       text-align: center !important;
+    }
+    .borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+    }
+    .cent td {
+     text-align: center;
+     vertical-align: middle !important;
+    }
+    .cent th {
+     text-align: center;
+     background-color: #DDDDDD;
     }
   </style>
 </head>

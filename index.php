@@ -13,6 +13,8 @@ if (isset($_SESSION['ad_priv'])) {
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+  <!-- animate css -->
+  <link rel="stylesheet" href="dist/css/animate.min.css">
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
 </head>
 <body class="hold-transition login-page">
@@ -31,14 +33,14 @@ if (isset($_SESSION['ad_priv'])) {
       </div>
       <div class="box-footer">
         <br>
-        <?php include_once("login.php"); ?>
+        <?php include_once "login.php"; ?>
         <form action="" method="post">
           <div class="form-group has-feedback">
-            <input type="text" class="form-control" name="uname" placeholder="Username">
+            <input type="text" class="form-control" name="uname" placeholder="Username" required>
             <span class="fa fa-at form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input type="password" id="ss" class="form-control" name="upass" placeholder="Password">
+            <input type="password" class="form-control" name="upass" placeholder="Password" required>
             <span class="fa fa-key form-control-feedback"></span>
           </div>
           <button type="submit" class="btn btn-primary btn-block btn-flat" name="ulogin">Login</button>
@@ -49,14 +51,9 @@ if (isset($_SESSION['ad_priv'])) {
 </div><!-- /.login-box -->
 
 <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<script src="plugins/jQueryUI/jquery-ui.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-$(function(){
-  $(document).ready(function() {
-      $('#as').effect("shake", {times:3}, 500 );
-    });
-  });
+  $('#as').addClass("shake animated");
 </script>
 </body>
 </html>

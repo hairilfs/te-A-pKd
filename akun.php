@@ -5,7 +5,7 @@
       Akun
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
       <li><a href="#">Akun</a></li>
     </ol>
   </section>
@@ -24,13 +24,13 @@
                   $new = $_POST['passnew'];
                   $renew = $_POST['repassnew'];
 
-                  $query = $mysqli->query("SELECT * FROM user WHERE username='admin'");
+                  $query = $mysqli->query("SELECT * FROM admin WHERE username='$_SESSION[ad_priv]'");
                   $res = $query->fetch_object();
 
                   if ($now==$res->password) {
                     if ($new==$renew) {
                       $newpass = md5($new);
-                      $ganti = $mysqli->query("UPDATE user SET password='$newpass' WHERE username='admin';");
+                      $ganti = $mysqli->query("UPDATE admin SET password='$newpass' WHERE username='$_SESSION[ad_priv]';");
                       echo "<script>swal('Sukses!', 'Penggantian password berhasil.', 'success');</script>";
                     } else {
                       echo "<script>swal('Oops!', 'Salah mengulangi password baru.', 'warning');</script>";
@@ -47,19 +47,19 @@
                 <div class="form-group">
                   <label class="col-sm-4 control-label">Password saat ini</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control" name="passnow" placeholder="Password saat ini">
+                    <input type="password" class="form-control" name="passnow" placeholder="Password saat ini" required>
                   </div>
                 </div><hr>
                 <div class="form-group">
                   <label class="col-sm-4 control-label">Password baru</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control" name="passnew" placeholder="Password baru">
+                    <input type="password" class="form-control" name="passnew" placeholder="Password baru" required>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-4 control-label">Ulangi password baru</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control" name="repassnew" placeholder="Ulangi password baru">
+                    <input type="password" class="form-control" name="repassnew" placeholder="Ulangi password baru" required>
                   </div>
                 </div>
               </div><!-- /.box-body -->

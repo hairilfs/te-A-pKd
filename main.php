@@ -5,30 +5,30 @@ if (!isset($_SESSION['ad_priv'])) {
 } else {
 $content = 0;
 $content = $_GET['page'];
-include("header.php");
-include("sidebar.php");
+include_once "header.php";
+include_once "sidebar.php";
 $mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
 switch ($content) {
   case 1:
-  include("gen_jadwal.php");
+  include_once "gen_jadwal.php";
   break;
   case 2:
-  include("masterpkd.php");
+  include_once "masterpkd.php";
   break;
   case 3:
-  include("pengaturan.php");
+  include_once "pengaturan.php";
   break;
   case 4:
-  include("akun.php");
+  include_once "akun.php";
   break;
   case 5:
-  include("testing1.php");
+  include_once "testing1.php";
   break;
   default:
-  include("welcome.php");
+  include_once "welcome.php";
   break;
 }
 
-include("footer.php");
+include_once "footer.php";
 }
 ?>

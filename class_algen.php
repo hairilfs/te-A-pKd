@@ -1,7 +1,7 @@
 <?php
 // ini class untuk memproses algen
 
-class Hairil 	{
+class Algen {
   public $jml_ind;
   public $jml_pkd;
   public $jml_hari;
@@ -9,11 +9,14 @@ class Hairil 	{
   public $pm;
   public $bulan_x;
   public $tahun_x;
+  public $minshift;
+  public $maxshift;
+  public $pola_shift;
 
-  function __construct($bln, $thn) {
+  function __construct($bln=null, $thn=null, $minshift=null, $maxshift=null, $pola=null) {
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
     $q_aturan = $mysqli->query("SELECT populasi, pc, pm FROM pengaturan WHERE status=1");
-    $q_pkd    = $mysqli->query("SELECT COUNT(*) as jum_pkd FROM pkd WHERE jabatan='ANGGOTA'");
+    $q_pkd    = $mysqli->query("SELECT COUNT(*) as jum_pkd FROM pkd WHERE jabatan='ANGGOTA' AND status='Aktif'");
     $q_res_a  = $q_aturan->fetch_object();
     $q_res_p  = $q_pkd->fetch_object();
 
@@ -24,47 +27,38 @@ class Hairil 	{
     $this->pm       = $q_res_a->pm;
     $this->bulan_x  = $bln;
     $this->tahun_x  = $thn;
+    $this->minshift = $minshift;
+    $this->maxshift = $maxshift;
+    $this->pola_shift = $pola;
   }
 
   // fungsi untuk mengkonversi angka menjadi bulan
   function cetak_bulan($angka) {
     $bulan = "";
     switch ($angka) {
-      case 1:
-      $bulan = "Januari";
+      case 1: $bulan = "JANUARI";
       break;
-      case 2:
-      $bulan = "Februari";
+      case 2: $bulan = "FEBRUARI";
       break;
-      case 3:
-      $bulan = "Maret";
+      case 3: $bulan = "MARET";
       break;
-      case 4:
-      $bulan = "April";
+      case 4: $bulan = "APRIL";
       break;
-      case 5:
-      $bulan = "Mei";
+      case 5: $bulan = "MEI";
       break;
-      case 6:
-      $bulan = "Juni";
+      case 6: $bulan = "JUNI";
       break;
-      case 7:
-      $bulan = "Juli";
+      case 7: $bulan = "JULI";
       break;
-      case 8:
-      $bulan = "Agustus";
+      case 8: $bulan = "AGUSTUS";
       break;
-      case 9:
-      $bulan = "September";
+      case 9: $bulan = "SEPTEMBER";
       break;
-      case 10:
-      $bulan = "Oktober";
+      case 10: $bulan = "OKTOBER";
       break;
-      case 11:
-      $bulan = "November";
+      case 11: $bulan = "NOVEMBER";
       break;
-      case 12:
-      $bulan = "Desember";
+      case 12: $bulan = "DESEMBER";
       break;
     }
     return $bulan;
@@ -97,51 +91,22 @@ class Hairil 	{
   }
 
   // fungsi untuk generate random shift
-  function gen_rand_shift($req=null) {
+  function gen_rand_shift($req="") {
+    // $a = array();
     switch ($req) {
-      case 'S':
-        $a = array("S1", "S2", "SC", "SP");
-        break;
+      case "S":
+      $a = array("S1", "SC", "S2", "SP");
+      break;
       default:
-        $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
-        break;
+      $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
+      break;
     }
     shuffle($a);
     $random = array_rand($a,1);
     return $a[$random];
   }
 
-  // fungsi untuk menentukan pola libur
-  function pola($awal_libur=0) {
-    switch ($awal_libur) {
-      case 0:
-      $shift  = array('L','S','X','X','X','X','L');
-      break;
-      case 1:
-      $shift  = array('L','L','S','X','X','X','X');
-      break;
-      case 2:
-      $shift  = array('X','L','L','S','X','X','X');
-      break;
-      case 3:
-      $shift  = array('X','X','L','L','S','X','X');
-      break;
-      case 4:
-      $shift  = array('X','X','X','L','L','S','X');
-      break;
-      case 5:
-      $shift  = array('X','X','X','X','L','L','S');
-      break;
-      case 6:
-      $shift  = array('S','X','X','X','X','L','L');
-      break;
-      default:
-      $shift  = array('S','X','X','X','X','L','L');
-      break;
-    }
-    return $shift;
-  }
-
+  // fungsi untuk menentukan pola libur danru
   function pola_danru($awal_libur=0) {
     switch ($awal_libur) {
       case 0:
@@ -172,18 +137,35 @@ class Hairil 	{
     return $shift;
   }
 
-  function jadwal_danru() {
-    $key=0;
-    $hari = array();
-    $shift = $this->pola_danru();
-    for ($i=0; $i < $this->jml_hari; $i++) { // hari
-      // if ($shift[$key]=="L") $acak2 = $shift[$key];
-      // else $acak2 = $shift[$key];
-      array_push($hari, $shift[$key]);
-      $key++;
-      if ($key>=count($shift)) $key = 0;
+  // fungsi untuk menentukan pola libur
+  function pola($awal_libur=0) {
+    switch ($awal_libur) {
+      case 0:
+      $shift  = array('S','X','X','X','X','L','L');
+      break;
+      case 1:
+      $shift  = array('L','S','X','X','X','X','L');
+      break;
+      case 2:
+      $shift  = array('L','L','S','X','X','X','X');
+      break;
+      case 3:
+      $shift  = array('X','L','L','S','X','X','X');
+      break;
+      case 4:
+      $shift  = array('X','X','L','L','S','X','X');
+      break;
+      case 5:
+      $shift  = array('X','X','X','L','L','S','X');
+      break;
+      case 6:
+      $shift  = array('X','X','X','X','L','L','S');
+      break;
+      default:
+      $shift  = array('X','X','X','X','L','L','S');
+      break;
     }
-    return $hari;
+    return $shift;
   }
 
   // fungsi untuk generate individu
@@ -191,7 +173,7 @@ class Hairil 	{
     $ind 	  = array();
     $pkd 	  = array();
     $hari   = array();
-    $shift  = $this->pola(6);
+    $shift  = $this->pola($this->pola_shift);
     // penentuan pola harian
     switch ($this->jml_hari) {
       case 31:
@@ -245,7 +227,7 @@ class Hairil 	{
           $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
           if ($k==0 && substr($new_ind[$i][$j][0], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
           elseif ($k==1 && substr($new_ind[$i][$j][1], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
-          elseif ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S") $pnl += 1;
+          // elseif ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S") $pnl += 1;
         }
       }
       array_push($hc_ind, $pnl);
@@ -283,7 +265,7 @@ class Hairil 	{
     $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
     $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
     $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
-    $hc_sp = 0;   $hc_lb = 0;   $hc_hari = 0;
+    $hc_sp = 0;   $hc_hari = 0;
 
     for ($q=0; $q < count($new_ind); $q++) {
       for ($w=0; $w < count($new_ind[0][0]); $w++) {
@@ -320,28 +302,27 @@ class Hairil 	{
             case 'SP':
             $hc_sp += 1;
             break;
-            case 'L':
-            $hc_lb += 1;
+            default:
             break;
           }
         }
 
-        if ($hc_p1 < 1 || $hc_p1 > 2) $hc_hari += 1;
-        if ($hc_s1 < 1 || $hc_s1 > 2) $hc_hari += 1;
-        if ($hc_m1 < 1 ) $hc_hari += 1;
-        if ($hc_p2 < 1 || $hc_p2 > 2) $hc_hari += 1;
-        if ($hc_s2 < 1 || $hc_s2 > 2) $hc_hari += 1;
-        if ($hc_m2 < 1) $hc_hari += 1;
-        if ($hc_pc < 1) $hc_hari += 1;
-        if ($hc_sc < 1) $hc_hari += 1;
+        if ($hc_p1 < $this->minshift[0] || $hc_p1 > $this->maxshift[0]) $hc_hari += 1;
+        if ($hc_s1 < $this->minshift[1] || $hc_s1 > $this->maxshift[1]) $hc_hari += 1;
+        if ($hc_m1 < $this->minshift[2] || $hc_m1 > $this->maxshift[2]) $hc_hari += 1;
+        if ($hc_p2 < $this->minshift[5] || $hc_p2 > $this->maxshift[5]) $hc_hari += 1;
+        if ($hc_s2 < $this->minshift[6] || $hc_s2 > $this->maxshift[6]) $hc_hari += 1;
+        if ($hc_m2 < $this->minshift[7] || $hc_m1 > $this->maxshift[7]) $hc_hari += 1;
+        if ($hc_pc < $this->minshift[3] || $hc_m1 > $this->maxshift[3]) $hc_hari += 1;
+        if ($hc_sc < $this->minshift[4] || $hc_m1 > $this->maxshift[4]) $hc_hari += 1;
 
-        if ($hc_pp < 1 || $hc_pp > 3) $hc_hari += 1;
-        if ($hc_sp < 1 || $hc_sp > 2) $hc_hari += 1;
+        if ($hc_pp < $this->minshift[8] || $hc_pp > $this->maxshift[8]) $hc_hari += 1;
+        if ($hc_sp < $this->minshift[9] || $hc_sp > $this->maxshift[9]) $hc_hari += 1;
 
         $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
         $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
         $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
-        $hc_sp = 0;   $hc_lb = 0;
+        $hc_sp = 0;   
       }
       array_push($hc_ind, $hc_hari);
       $hc_hari = 0;
@@ -356,6 +337,8 @@ class Hairil 	{
     $nikpkd = array();
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
     $res = $mysqli->query("SELECT * FROM pkd WHERE jabatan='ANGGOTA'");
+    $res2 = $mysqli->query("SELECT * FROM pkd WHERE jabatan='DANRU'");
+    $listpkd2 = $res2->fetch_object();
     while ($listpkd = $res->fetch_object()) {
       array_push($namapkd, $listpkd->nama);
       array_push($nikpkd, $listpkd->nik);
@@ -368,6 +351,7 @@ class Hairil 	{
 
     for ($i=0; $i < $loop_aja; $i++) {
       // echo "<label>Individu ke ".$i."</label>";
+      echo "<input type='hidden' name='adm' value='$_SESSION[ad_priv]'>";
       echo "<div class='table-responsive'>\n<table class='table table-bordered table-condensed'>";
       echo "<tr>\n<td align='center' rowspan='2'>No.</td>\n<td align='center' rowspan='2'>Nama</td>\n";
       echo "<td colspan='$this->jml_hari' align='center'>".$this->cetak_bulan($this->bulan_x)." ".$this->tahun_x."</td>";
@@ -378,20 +362,16 @@ class Hairil 	{
       echo "</tr>";
 
       // create row danru
-      $code2 = $this->jadwal_danru();
+      $code2 = $this->pola_danru($this->pola_shift);
       $key2 = 0;
-      echo "<tr>\n<td align='center'>1</td>\n<td>DENIANSYAH</td>";
+      echo "<tr>\n<td align='center'>1</td>\n<td>$listpkd2->nama</td>";
+      echo "<input type='hidden' name=nik[] value='$listpkd2->nik'>";
       for ($p=0; $p<$this->jml_hari; $p++)
       {
         echo "<td align='center'";
-        if ($code2[$key2]=="L") {
-          echo " style='background: red;'";
-          echo ">".$code2[$key2]."</td>\n";
-          echo "<input type='hidden' name='shift[0][]' value='$code2[$key2]' >\n";
-        } else {
-          echo ">".$code2[$key2]."</td>\n";
-          echo "<input type='hidden' name='shift[0][]' value='$code2[$key2]' >\n";
-        }
+        if ($code2[$key2]=="L") echo " style='background: red;'";
+        echo ">".$code2[$key2]."</td>\n";
+        echo "<input type='hidden' name='shift[0][]' value='$code2[$key2]' >\n";
         $key2++;
         if ($key2>=count($code2)) $key2 = 0;
       }
@@ -493,11 +473,11 @@ class Hairil 	{
     $probfit      = array();
     $arr_poin_rw  = array();
     $range        = array();
-    $jum_ind 			= count($new_individu);
+    // $jum_ind 			= count($new_individu);
     $fit_masing2	= $this->all_fitness3($new_individu);
     $tot_fit      = array_sum($fit_masing2);
 
-    for ($i=0; $i < $jum_ind; $i++) {
+    for ($i=0; $i < $this->jml_ind; $i++) {
       // prob fit tiap individu
       $c = $fit_masing2[$i] / $tot_fit;
       $d = round($c, 6);
@@ -521,8 +501,8 @@ class Hairil 	{
     // echo "<br/>";
 
     // menempatkan pointer
-    for ($j=0; $j < $jum_ind; $j++) {
-      for ($k=0; $k < $jum_ind; $k++) {
+    for ($j=0; $j < $this->jml_ind; $j++) {
+      for ($k=0; $k < $this->jml_ind; $k++) {
         if ($arr_poin_rw[$j] <= $range[$k]) {
           if (!in_array($k, $new_poin)) {
             array_push($new_poin, $k);
@@ -614,18 +594,19 @@ class Hairil 	{
     }
     // print_r($selected);
 
+    $bentrok ="";
     for ($m=0; $m < count($selected); $m++) {
-      $isl  = $selected[$m]; // mengisi $isl dengan value pada array $selected
+      $isl  = $selected[$m]; // mengisi $isl dengan value pada array $selected        
       if ($output_array[$isl] != "L") {
-        // if ($isl >= 2 && substr($output_array[$isl], 0,1)!="S" && $output_array[$isl-1]=="L" && $output_array[$isl-2]=="L") {
-        //   $output_array[$isl] = $this->gen_rand_shift("S");
-        // } else {
+        if ($isl > 1 && $output_array[$isl-1]=="L" && $output_array[$isl-2]=="L") {
+          $output_array[$isl] = $this->gen_rand_shift("S");
+        } else {
           $output_array[$isl] = $this->gen_rand_shift();
-        // }
-        // $ran0123 	= $this->gen_rand_shift();
-        // $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
+        }
       }
-      // echo $ran0123." ";
+    // $ran0123 	= $this->gen_rand_shift();
+    // $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
+    // echo $ran0123." ";
     }
 
     $ptg    = count($individu[0]) * count($individu[0][0]);

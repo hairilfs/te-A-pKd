@@ -8,7 +8,7 @@
         <img src="dist/img/cop-512.png" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
-        <p>Admin</p>
+        <p><?= strtoupper($_SESSION['ad_priv']); ?></p>
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>
     </div>

@@ -40,7 +40,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Pm</label>
                 <div class="col-sm-10">
-                  <input type="number" step="any" min="0.001" max="0.1" class="form-control" name="pm" placeholder="Prob. Mutasi" required>
+                  <input type="number" step="any" min="0.001" max="1" class="form-control" name="pm" placeholder="Prob. Mutasi" required>
                 </div>
               </div>
               <div class="form-group">
@@ -71,7 +71,7 @@
           </div><!-- /.box-header -->
           <div class="box-body">
             <div class="table-responsive">
-              <table id="table-aturan" class="table table-bordered table-striped">
+              <table id="table-data" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -128,7 +128,7 @@
                               </div>
                               <div class="form-group">
                                 <label>Pm</label>
-                                <input type="number" step="any" min="0.001" max="0.1" class="form-control" name="pm" value="<?php echo $row->pm; ?>" required>
+                                <input type="number" step="any" min="0.001" max="1" class="form-control" name="pm" value="<?php echo $row->pm; ?>" required>
                               </div>
                             </div>
                             <div class="modal-footer">

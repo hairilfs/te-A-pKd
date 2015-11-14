@@ -36,15 +36,14 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="dist/js/demo.js"></script>
 <!-- page script -->
 <script>
-$("#yosh").click(function(){
-  $("#bloading").after("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+$("#loadspin").click(function(){
+  $("#newjad").after("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
 });
 </script>
 
 <script>
 $(function(){
-  $('#table-pkd').DataTable();
-  $('#table-aturan').DataTable();
+  $('#table-data').DataTable();
 });
 </script>
 

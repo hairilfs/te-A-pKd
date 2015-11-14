@@ -3,7 +3,7 @@
   <section class="content-header">
     <h1>Master PKD</h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-home"></i> Home > Master PKD</a></li>
       <li><a href="#"></a></li>
     </ol>
   </section>
@@ -42,6 +42,17 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Status</label>
+                <div class="col-sm-10">
+                  <div class="radio-inline">
+                    <input type="radio" name="optstat" value="Aktif">Aktif
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" name="optstat" value="Non-aktif" checked>Non-aktif
+                  </div>
+                </div>
+              </div>              
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -59,13 +70,14 @@
           </div><!-- /.box-header -->
           <div class="box-body">
             <div class="table-responsive">
-              <table id="table-pkd" class="table table-bordered table-striped">
+              <table id="table-data" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>No.</th>
                     <th>NIK</th>
                     <th>Nama</th>
                     <th>Jabatan</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -79,6 +91,10 @@
                       <td><?php echo $row->nik; ?></td>
                       <td><?php echo $row->nama; ?></td>
                       <td><?php echo $row->jabatan; ?></td>
+                      <?php
+                      if($row->status=="Aktif") echo "<td class='bg-success'>".$row->status." <i class='fa fa-check'></i></td>";
+                      else echo "<td class='bg-danger'>".$row->status." <i class='fa fa-close'></i></td>";
+                      ?>
                       <td>
                         <?php
                         echo "<button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editpkd$row->id'>Ubah</button> &nbsp;";
@@ -112,6 +128,15 @@
                                 </label>
                                 <label class="radio-inline">
                                   <input type="radio" name="optjab" value="ANGGOTA" <?php if($row->jabatan=="ANGGOTA") echo "checked";?>>Anggota
+                                </label>
+                              </div>
+                              <label>Status</label>
+                              <div class="form-group">
+                                <label class="radio-inline">
+                                  <input type="radio" name="optstat" value="Aktif" <?php if($row->status=="Aktif") echo "checked";?>>Aktif
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="optstat" value="Non-aktif" <?php if($row->status=="Non-aktif") echo "checked";?>>Non-aktif
                                 </label>
                               </div>
                             </div>

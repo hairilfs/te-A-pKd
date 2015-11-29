@@ -4,11 +4,10 @@
   <section class="content-header">
     <h1>
       Dashboard
-      <small>Control panel</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Welcome</li>
+      <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+      <li class="active">Dashboard</li>
     </ol>
   </section>
 
@@ -25,27 +24,9 @@
         <h3 class="widget-user-username">Admin Panel</h3>
         <h5 class="widget-user-desc">Hello Admin!</h5>
       </div>
-      <div class="box-footer">
-        <div class="row">
-          <div class="col-sm-4 border-right">
-            <div class="description-block">
-              <h5 class="description-header">*****</h5>
-              <!-- <span class="description-text">SALES</span> -->
-            </div><!-- /.description-block -->
-          </div><!-- /.col -->
-          <div class="col-sm-4 border-right">
-            <div class="description-block">
-              <h5 class="description-header">Selamat datang di OpaL-PKD</h5>
-              <span class="description-text">Optimasi Jadwal Petugas Keamanan Dalam (PKD) - St. Sudimara</span>
-            </div><!-- /.description-block -->
-          </div><!-- /.col -->
-          <div class="col-sm-4">
-            <div class="description-block">
-              <h5 class="description-header">*****</h5>
-              <!-- <span class="description-text">PRODUCTS</span> -->
-            </div><!-- /.description-block -->
-          </div><!-- /.col -->
-        </div><!-- /.row -->
+      <div class="box-footer text-center">
+        <h2>Selamat datang di OpaL - PKD</h2>
+        <p><i>OPTIMASI PENJADWALAN PETUGAS KEAMANAN DALAM (PKD) STASIUN SUDIMARA</i></p>
       </div>
     </div><!-- /.widget-user -->
 

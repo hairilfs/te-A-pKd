@@ -46,9 +46,7 @@
       swal({
        title: "Sukses!",
        text: "Penyimpanan jadwal berhasil.",
-       type: "success",
-       height: 400,
-       width: 400
+       type: "success"
      }, function(){
        window.close();
      });

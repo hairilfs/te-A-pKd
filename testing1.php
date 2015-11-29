@@ -3,11 +3,10 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Dashboard
-      <small>Control panel</small>
+      Jadwal
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
       <li class="active">Jadwal</li>
     </ol>
   </section>
@@ -46,7 +45,7 @@
             <script>
             swal({
              title: "Oops, terjadi kesalahan!",
-             text: "Jadwal bulan <?= $ambln->cetak_bulan($bln).' '.$thn; ?> sudah ada. Harap hapus terlebih dahulu untuk membuat yang baru.",
+             text: "Jadwal <?= $ambln->cetak_bulan($bln).' '.$thn; ?> sudah ada. Harap hapus terlebih dahulu untuk membuat yang baru.",
              type: "error"
              }, function(){
                window.location.replace("main.php?page=1");
@@ -56,36 +55,35 @@
               $thnbln = $thn."-".$bln;
               include_once("class_algen.php");
               $saya = new Algen($bln, $thn, $minshift, $maxshift, $pola);
+              // $saya->cek_batas();
               $gen_baru = $saya->gen_array_ind();
               $fit_it = array();
               $y_axis = array();
-              $aa = 0;
-              $bb = 0;
+              $fitness = 0;
+              $gnr = 0;
 
-              while ($bb<=$res->generasi && $aa != 1) {
+              while ($gnr<=$res->generasi && $fitness!=1) {
                 $get = $saya->do_algen($gen_baru);
                 $hasil = $saya->all_fitness3($get);
 
-            // for ($j=0; $j < $res->populasi; $j++) {
-              // if ($get[$j] == 1) {
                 if ($hasil[0] == 1) {
-                  $aa = 1;
+                  $fitness = 1;
                   array_push($fit_it, $hasil[0]);
-                  array_push($y_axis, $bb);
-                // break;
+                  array_push($y_axis, $gnr);
                 }
-            // }
 
-                if (($bb%10==0) AND $aa!=1) {
+                if (($gnr%10==0) AND $fitness!=1) {
                   array_push($fit_it, $hasil[0]);
-                  array_push($y_axis, $bb);
+                  array_push($y_axis, $gnr);
                 }
-                $bb++;
-                $gen_baru = array();
+
+                $gnr++;
                 $gen_baru = $get;
               }
-              echo "Nilai Fitness : ".$hasil[0]." || Generasi ke : ".($bb-1)." || Populasi : ".$res->populasi." || Pc : ".$res->pc." || Pm : ".$res->pm."<br/>";
-
+              echo "Nilai Fitness : ".$hasil[0]." || Generasi ke : ".($gnr-1)." || Populasi : ".$res->populasi." || Pc : ".$res->pc." || Pm : ".$res->pm."<br/>";
+              // echo "<pre>";
+              // print_r($hasil);
+              // echo "</pre>";
               echo "<form method='post' action='simpanjadwal.php' target='_blank'>";
               echo "<input type='hidden' name='thnbln' value='$thnbln'>";
               $saya->cetak_individu_biasa($gen_baru, 1);
@@ -93,7 +91,7 @@
               echo "<form><br>";
 
               $finish = microtime(true) - $start;
-              echo 'This page loaded in '.gmdate("H:i:s", $finish+1)."<br>";
+              echo 'This page loaded in '.gmdate("H:i:s", $finish)."<br>";
               echo "Start => $now <br> End => ".date("H:i:s");
             }
           }

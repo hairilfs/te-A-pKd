@@ -30,7 +30,6 @@
                           <td align="center"><label>Bulan</label></td>
                           <td>
                             <select class="form-control" name="selbulan">
-                              <option value="">- Pilih Bulan -</option>
                               <option value="1">Januari</option>
                               <option value="2">Februari</option>
                               <option value="3">Maret</option>
@@ -54,7 +53,6 @@
                           <td align="center"><label>Tahun</label></td>
                           <td>
                             <select class="form-control" name="seltahun">
-                              <option value="">- Pilih Tahun -</option>
                               <option value="2015">2015</option>
                               <option value="2016">2016</option>
                               <option value="2017">2017</option>
@@ -72,7 +70,6 @@
                           <td align="center"><label>Pola</label></td>
                           <td>
                             <select class="form-control" name="selpola">
-                              <option value="">- Pilih Pola -</option>
                               <option value="0">0</option>
                               <option value="1">1</option>
                               <option value="2">2</option>

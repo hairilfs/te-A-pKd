@@ -34,7 +34,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Pc</label>
                 <div class="col-sm-10">
-                  <input type="number" step="any" min="0.5" max="1" class="form-control" name="pc" placeholder="Prob. Crossover" required>
+                  <input type="number" step="any" min="0.1" max="1" class="form-control" name="pc" placeholder="Prob. Crossover" required>
                 </div>
               </div>
               <div class="form-group">
@@ -124,7 +124,7 @@
                               </div>
                               <div class="form-group">
                                 <label>Pc</label>
-                                <input type="number" step="any" min="0.5" max="1" class="form-control" name="pc" value="<?php echo $row->pc; ?>" required>
+                                <input type="number" step="any" min="0.1" max="1" class="form-control" name="pc" value="<?php echo $row->pc; ?>" required>
                               </div>
                               <div class="form-group">
                                 <label>Pm</label>

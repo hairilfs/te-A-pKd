@@ -13,7 +13,7 @@ class Algen {
   public $maxshift;
   public $pola_shift;
 
-  function __construct($bln=null, $thn=null, $minshift=null, $maxshift=null, $pola=null) {
+  function __construct($bln=1, $thn=2016, $minshift=null, $maxshift=null, $pola=null) {
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
     $q_aturan = $mysqli->query("SELECT populasi, pc, pm FROM pengaturan WHERE status=1");
     $q_pkd    = $mysqli->query("SELECT COUNT(*) as jum_pkd FROM pkd WHERE jabatan='ANGGOTA' AND status='Aktif'");
@@ -94,8 +94,14 @@ class Algen {
   function gen_rand_shift($req="") {
     // $a = array();
     switch ($req) {
+      case "P":
+      $a = array("P1", "P2", "PP", "PC");
+      break;
       case "S":
       $a = array("S1", "SC", "S2", "SP");
+      break;
+      case "M":
+      $a = array("M1", "M2");
       break;
       default:
       $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
@@ -141,28 +147,28 @@ class Algen {
   function pola($awal_libur=0) {
     switch ($awal_libur) {
       case 0:
-      $shift  = array('S','X','X','X','X','L','L');
+      $shift  = array('S','P','S','P','M','L','L');
       break;
       case 1:
-      $shift  = array('L','S','X','X','X','X','L');
+      $shift  = array('L','S','P','S','P','M','L');
       break;
       case 2:
-      $shift  = array('L','L','S','X','X','X','X');
+      $shift  = array('L','L','S','P','S','P','M');
       break;
       case 3:
-      $shift  = array('X','L','L','S','X','X','X');
+      $shift  = array('M','L','L','S','P','S','P');
       break;
       case 4:
-      $shift  = array('X','X','L','L','S','X','X');
+      $shift  = array('P','M','L','L','S','P','S');
       break;
       case 5:
-      $shift  = array('X','X','X','L','L','S','X');
+      $shift  = array('S','P','M','L','L','S','P');
       break;
       case 6:
-      $shift  = array('X','X','X','X','L','L','S');
+      $shift  = array('P','S','P','M','L','L','S');
       break;
-      default:
-      $shift  = array('X','X','X','X','L','L','S');
+      default:      
+      $shift  = array('P','S','P','M','L','L','S');
       break;
     }
     return $shift;
@@ -186,14 +192,16 @@ class Algen {
       $selisih=0;
       break;
     }
-
+    
     for ($y=0; $y < $this->jml_ind; $y++) { // individu , populasi
       $key = 0;
       for ($x=0; $x < $this->jml_pkd; $x++) { // pkd
         for ($i=0; $i < $this->jml_hari; $i++) { // hari
           $acak = $this->gen_rand_shift();
           if ($shift[$key]=="L") $acak2 = "L";
+          elseif ($shift[$key]=="P") $acak2 = $this->gen_rand_shift("P");
           elseif ($shift[$key]=="S") $acak2 = $this->gen_rand_shift("S");
+          elseif ($shift[$key]=="M") $acak2 = $this->gen_rand_shift("M");
           else $acak2 = $acak;
           array_push($hari, $acak2);
           $key++;
@@ -219,12 +227,15 @@ class Algen {
 
   // penalti ini terjadi apabila seorang petugas sudah 2 hari libur dan besok tidak masuk siang
   function cek_shiftLLS($new_ind) {
+    $loop_ind = count($new_ind);
+    $loop_pkd = count($new_ind[0]);
+    $loop_hr = count($new_ind[0][0])-2;
     $pnl= 0;
     $hc_ind = array();
-    for ($i=0; $i < count($new_ind); $i++) {
-      for ($j=0; $j < count($new_ind[0]); $j++) {
-        for ($k=0; $k < count($new_ind[0][0])-2; $k++) {
-          $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
+    for ($i=0; $i < $loop_ind; $i++) {
+      for ($j=0; $j < $loop_pkd; $j++) {
+        for ($k=0; $k < $loop_hr; $k++) {
+          // $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
           if ($k==0 && substr($new_ind[$i][$j][0], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
           elseif ($k==1 && substr($new_ind[$i][$j][1], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
           // elseif ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S") $pnl += 1;
@@ -238,16 +249,18 @@ class Algen {
 
   // penalti ini terjadi apabila seorang petugas hari ini masuk malam dan besok masuk pagi
   function cek_shiftMP($new_ind) {
+    $loop_ind = count($new_ind);
+    $loop_pkd = count($new_ind[0]);
+    $loop_hr = count($new_ind[0][0])-1;
     $pnl = 0;
     $hc_ind = array();
-    for ($i=0; $i < count($new_ind); $i++) {
-      for ($j=0; $j < count($new_ind[0]); $j++) {
-        for ($k=0; $k < count($new_ind[0][0])-1; $k++) {
+    for ($i=0; $i < $loop_ind; $i++) {
+      for ($j=0; $j < $loop_pkd; $j++) {
+        for ($k=0; $k < $loop_hr; $k++) {
           $kini = substr($new_ind[$i][$j][$k], 0,1);
           $esok = substr($new_ind[$i][$j][$k+1], 0,1);
-          if ($kini=="M" AND $esok=="P") {
-            $pnl += 1;
-          }
+          if ($kini=="M" AND $esok=="P") $pnl += 1;
+          elseif ($kini=="M" AND $esok=="M") $pnl += 1;
           // if ($kini=="M" AND $esok=="M") {
           //   $pnl += 1;
           // }
@@ -261,15 +274,18 @@ class Algen {
 
   // penalti ini terjadi apabila jumlah petugas jaga dalam satu hari kurang dari jumlah yang ditentukan
   function cek_shiftHR($new_ind) {
+    $loop_ind = count($new_ind);
+    $loop_pkd = count($new_ind[0]);
+    $loop_hr = count($new_ind[0][0]);
     $hc_ind = array();
     $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
     $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
     $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
     $hc_sp = 0;   $hc_hari = 0;
 
-    for ($q=0; $q < count($new_ind); $q++) {
-      for ($w=0; $w < count($new_ind[0][0]); $w++) {
-        for ($e=0; $e < count($new_ind[0]); $e++) {
+    for ($q=0; $q < $loop_ind; $q++) {
+      for ($w=0; $w < $loop_hr; $w++) {
+        for ($e=0; $e < $loop_pkd; $e++) {
           $isi_gen = $new_ind[$q][$e][$w];
           switch ($isi_gen) {
             case 'P1':
@@ -307,17 +323,17 @@ class Algen {
           }
         }
 
-        if ($hc_p1 < $this->minshift[0] || $hc_p1 > $this->maxshift[0]) $hc_hari += 1;
-        if ($hc_s1 < $this->minshift[1] || $hc_s1 > $this->maxshift[1]) $hc_hari += 1;
-        if ($hc_m1 < $this->minshift[2] || $hc_m1 > $this->maxshift[2]) $hc_hari += 1;
-        if ($hc_p2 < $this->minshift[5] || $hc_p2 > $this->maxshift[5]) $hc_hari += 1;
-        if ($hc_s2 < $this->minshift[6] || $hc_s2 > $this->maxshift[6]) $hc_hari += 1;
-        if ($hc_m2 < $this->minshift[7] || $hc_m1 > $this->maxshift[7]) $hc_hari += 1;
-        if ($hc_pc < $this->minshift[3] || $hc_m1 > $this->maxshift[3]) $hc_hari += 1;
-        if ($hc_sc < $this->minshift[4] || $hc_m1 > $this->maxshift[4]) $hc_hari += 1;
+        if ($hc_p1 < $this->minshift[0] OR $hc_p1 > $this->maxshift[0]) $hc_hari += 1; 
+        if ($hc_s1 < $this->minshift[1] OR $hc_s1 > $this->maxshift[1]) $hc_hari += 1; 
+        if ($hc_m1 < $this->minshift[2] OR $hc_m1 > $this->maxshift[2]) $hc_hari += 1; 
+        if ($hc_p2 < $this->minshift[5] OR $hc_p2 > $this->maxshift[5]) $hc_hari += 1; 
+        if ($hc_s2 < $this->minshift[6] OR $hc_s2 > $this->maxshift[6]) $hc_hari += 1; 
+        if ($hc_m2 < $this->minshift[7] OR $hc_m1 > $this->maxshift[7]) $hc_hari += 1; 
+        if ($hc_pc < $this->minshift[3] OR $hc_m1 > $this->maxshift[3]) $hc_hari += 1; 
+        if ($hc_sc < $this->minshift[4] OR $hc_m1 > $this->maxshift[4]) $hc_hari += 1; 
 
-        if ($hc_pp < $this->minshift[8] || $hc_pp > $this->maxshift[8]) $hc_hari += 1;
-        if ($hc_sp < $this->minshift[9] || $hc_sp > $this->maxshift[9]) $hc_hari += 1;
+        if ($hc_pp < $this->minshift[8] OR $hc_pp > $this->maxshift[8]) $hc_hari += 1; 
+        if ($hc_sp < $this->minshift[9] OR $hc_sp > $this->maxshift[9]) $hc_hari += 1; 
 
         $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
         $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
@@ -331,13 +347,26 @@ class Algen {
     return $hc_ind;
   }
 
+  function cek_batas(){
+    echo "batas p1 | min=".$this->minshift[0]." max=".$this->maxshift[0]."<br/>";
+    echo "batas s1 | min=".$this->minshift[1]." max=".$this->maxshift[1]."<br/>";
+    echo "batas m1 | min=".$this->minshift[2]." max=".$this->maxshift[2]."<br/>";
+    echo "batas p2 | min=".$this->minshift[5]." max=".$this->maxshift[5]."<br/>";
+    echo "batas s2 | min=".$this->minshift[6]." max=".$this->maxshift[6]."<br/>";
+    echo "batas m2 | min=".$this->minshift[7]." max=".$this->maxshift[7]."<br/>";
+    echo "batas pc | min=".$this->minshift[3]." max=".$this->maxshift[3]."<br/>";
+    echo "batas sc | min=".$this->minshift[4]." max=".$this->maxshift[4]."<br/>";
+    echo "batas pp | min=".$this->minshift[8]." max=".$this->maxshift[8]."<br/>";
+    echo "batas sp | min=".$this->minshift[9]." max=".$this->maxshift[9]."<br/>";
+  }
+
   // fungsi untuk mencetak individu kedalam table
   function cetak_individu_biasa($individu, $loop =0) {
     $namapkd = array();
     $nikpkd = array();
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
-    $res = $mysqli->query("SELECT * FROM pkd WHERE jabatan='ANGGOTA'");
-    $res2 = $mysqli->query("SELECT * FROM pkd WHERE jabatan='DANRU'");
+    $res = $mysqli->query("SELECT * FROM pkd WHERE jabatan='ANGGOTA' AND status='Aktif'");
+    $res2 = $mysqli->query("SELECT * FROM pkd WHERE jabatan='DANRU' AND status='Aktif'");
     $listpkd2 = $res2->fetch_object();
     while ($listpkd = $res->fetch_object()) {
       array_push($namapkd, $listpkd->nama);
@@ -383,7 +412,7 @@ class Algen {
         echo "<tr>";
         echo "<td align='center'>".($j+2)."</td>";
         echo "<td>".$namapkd[$j]."</td>";
-        echo "<input type='hidden' name=nik[] value='$nikpkd[$j]'>";
+        echo "<input type='hidden' name='nik[]' value='$nikpkd[$j]'>";
         for ($k=0; $k < $loop_hari; $k++) {
           if ($k != ($loop_hari-1) AND substr($individu[$i][$j][$k], 0, 1)=="M" AND substr($individu[$i][$j][$k+1], 0, 1)=="P") {
             echo "<td align='center' style='background: blue;'>".$individu[$i][$j][$k]."</td>";
@@ -598,7 +627,7 @@ class Algen {
     for ($m=0; $m < count($selected); $m++) {
       $isl  = $selected[$m]; // mengisi $isl dengan value pada array $selected        
       if ($output_array[$isl] != "L") {
-        if ($isl > 1 && $output_array[$isl-1]=="L" && $output_array[$isl-2]=="L") {
+        if ($isl > 0 && $output_array[$isl-1]=="L") {
           $output_array[$isl] = $this->gen_rand_shift("S");
         } else {
           $output_array[$isl] = $this->gen_rand_shift();

@@ -1,8 +1,8 @@
 <footer class="main-footer">
   <div class="pull-right hidden-xs">
-    <b>Version</b> 2.3.0
+    Template by <a href="http://almsaeedstudio.com">Almsaeed Studio</a></strong> <b>Version</b> 2.3.0
   </div>
-  <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+  <strong>Copyright &copy; 2015 &bull; Optimasi Penjadwalan Petugas Keamanan Dalam (PKD) - Stasiun Sudimara
 </footer>
 
 <!-- Control Sidebar -->
@@ -39,9 +39,23 @@ $.widget.bridge('uibutton', $.ui.button);
 $("#loadspin").click(function(){
   $("#newjad").after("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
 });
-</script>
 
-<script>
+$("#about").click(function(){
+  swal({
+    // title: "OpaL - PKD",
+    width : 500,
+    height : 500,
+    html :
+      "<img class='img-circle' src='dist/img/cop-512.png' width='100px'><br><br>"+
+      "Optimasi Penjwadwalan Petugas Keamanan Dalam (PKD)<br>Stasiun Sudimara<br><br>"+
+      "Copyright &copy; 2015 &bull; Hairil Fiqri Sulaiman<br><br>"+
+      // "<i class='fa fa-facebook-official'></i> <a href='https://facebook.com/hairil.f.sulaiman' target='_blank'>Hairil Fiqri Sulaiman</a><br>"+
+      "<i class='fa fa-envelope'></i> <a href='mailto:hairilfiqri@gmail.com' target='_blank'>hairilfiqri@gmail.com</a>",
+    // imageUrl : "dist/img/cop-512.png",
+    background : "url(dist/img/graywhite.gif)"
+  });
+});
+
 $(function(){
   $('#table-data').DataTable();
 });

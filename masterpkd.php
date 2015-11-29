@@ -3,8 +3,8 @@
   <section class="content-header">
     <h1>Master PKD</h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-home"></i> Home > Master PKD</a></li>
-      <li><a href="#"></a></li>
+      <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+      <li class="active">Master PKD</li>
     </ol>
   </section>
 
@@ -149,15 +149,15 @@
                       </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
 
-                    <div class="modal fade" id="delpkd<?php echo $row->id; ?>">
+                    <div class="modal fade" id="delpkd<?= $row->id; ?>">
                       <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Hapus Aturan</h4>
+                            <h4 class="modal-title">Hapus PKD</h4>
                           </div>
                           <div class="modal-body">
-                            <p>Yakin akan menghapus PKD no. <?php echo $no; ?>?</p>
+                            <p>Yakin akan menghapus <?= $row->nama; ?>?</p>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Lain kali</button>&nbsp;

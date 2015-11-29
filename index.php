@@ -19,7 +19,7 @@ if (isset($_SESSION['ad_priv'])) {
 </head>
 <body class="hold-transition login-page">
   <div class="login-box">
-    <div class="login-logo"><b>OpaL</b>-PKD
+    <div class="login-logo"><b>OpaL</b> &bull; PKD
     </div><!-- /.login-logo -->
     <!-- Widget: user widget style 1 -->
     <div class="box box-widget widget-user">

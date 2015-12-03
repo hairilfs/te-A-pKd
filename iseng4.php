@@ -73,35 +73,25 @@ function fitHR($new_ind) {
 			for ($e=0; $e < $loop_pkd; $e++) {
 				$isi_gen = $new_ind[$e][$w];
 				switch ($isi_gen) {
-					case 'P1':
-					$hc_p1 += 1;
+					case 'P1': $hc_p1 += 1;
 					break;
-					case 'S1':
-					$hc_s1 += 1;
+					case 'S1': $hc_s1 += 1;
 					break;
-					case 'M1':
-					$hc_m1 += 1;
+					case 'M1': $hc_m1 += 1;
 					break;
-					case 'P2':
-					$hc_p2 += 1;
+					case 'P2': $hc_p2 += 1;
 					break;
-					case 'S2':
-					$hc_s2 += 1;
+					case 'S2': $hc_s2 += 1;
 					break;
-					case 'M2':
-					$hc_m2 += 1;
+					case 'M2': $hc_m2 += 1;
 					break;
-					case 'PC':
-					$hc_pc += 1;
+					case 'PC': $hc_pc += 1;
 					break;
-					case 'SC':
-					$hc_sc += 1;
+					case 'SC': $hc_sc += 1;
 					break;
-					case 'PP':
-					$hc_pp += 1;
+					case 'PP': $hc_pp += 1;
 					break;
-					case 'SP':
-					$hc_sp += 1;
+					case 'SP': $hc_sp += 1;
 					break;
 					default:
 					break;
@@ -113,12 +103,18 @@ function fitHR($new_ind) {
 			if ($hc_m1 < 1 OR $hc_m1 > 1) $hc_hari += 1; 
 			if ($hc_p2 < 1 OR $hc_p2 > 2) $hc_hari += 1; 
 			if ($hc_s2 < 1 OR $hc_s2 > 2) $hc_hari += 1; 
-			if ($hc_m2 < 1 OR $hc_m1 > 1) $hc_hari += 1; 
-			if ($hc_pc < 1 OR $hc_m1 > 1) $hc_hari += 1; 
-			if ($hc_sc < 1 OR $hc_m1 > 1) $hc_hari += 1; 
+			if ($hc_m2 < 1 OR $hc_m2 > 1) $hc_hari += 1; 
+			if ($hc_pc < 1 OR $hc_pc > 1) $hc_hari += 1; 
+			if ($hc_sc < 1 OR $hc_sc > 1) $hc_hari += 1; 
 
 			if ($hc_pp < 1 OR $hc_pp > 3) $hc_hari += 1; 
 			if ($hc_sp < 1 OR $hc_sp > 2) $hc_hari += 1; 
+
+			if($w==6) {
+				echo $hc_m1." - ";
+				echo $hc_m2." - ";
+				echo $hc_hari;
+			}
 
 			$hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
 			$hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;

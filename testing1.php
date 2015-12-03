@@ -37,6 +37,21 @@
             $minshift = $_POST['min'];
             $maxshift = $_POST['max'];
 
+            for ($p=0; $p < 10; $p++) { 
+              if ($minshift[$p] > $maxshift[$p]) {
+                // echo "batas salah";
+                echo "<script>
+                   swal({
+             title: 'Oops, terjadi kesalahan!',
+             text: 'Batas shift salah',
+             type: 'error'
+             }, function(){
+               window.location.replace('main.php?page=1');
+             }); </script>
+                ";
+              }
+            }
+
             include_once 'class_konversi.php';
             $ambln = new Konversi();
             $cekjad = $mysqli->query("SELECT bln, thn FROM jadwal WHERE bln='$bln' AND thn='$thn'");
@@ -72,7 +87,7 @@
                   array_push($y_axis, $gnr);
                 }
 
-                if (($gnr%10==0) AND $fitness!=1) {
+                if (($gnr%20==0) AND $fitness!=1) {
                   array_push($fit_it, $hasil[0]);
                   array_push($y_axis, $gnr);
                 }

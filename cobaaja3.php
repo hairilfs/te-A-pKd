@@ -1,45 +1,27 @@
-<?php 
-// $a = 0;
-$a = null;
-
-// if ($a < 1 or $a > 2) {
-// 	echo "pinalti";
-// } else {
-// 	echo "tidak pinalti";
-// }
-
-if (!is_null($a)) {
-	// echo "isinya null";
-	echo json_encode(array("mq2" => "OFF"));
-} else {
-	echo $a;
-	echo "klasd";
-}
-?>
-
 <html>
 <head>
-	<title>coba</title>
-	<style type="text/css">
-		.b1 {
-			background-color: lime;
-		}
-	</style>
-	<script type="text/javascript">
-		// Shorthand for $( document ).ready()
-		$(function() {
-			document.getElementById("b1").style.backgroundColor='lime';
-		});
-
-		function coba() {			
-			document.getElementById("b1").style.backgroundColor='lime';
-		}
-
-	</script>
+	<title>coba validasi</title>
 </head>
-<body onload="">
-	<button type="button" id="b1" onclick="coba()">tombol 1</button>
-	<button type="button" id="b2">tombol 2</button>
-	<button type="button" id="b3">tombol 3</button>
+<body>
+	<form action="" method="post">
+		<label>min</label>
+		<input type="number" id="minval" min="1" name="minimal" value="1">
+		<label>max</label>
+		<input type="number" id="maxval" max="9" name="maximal" value="5">
+		<input type="submit" onclick="inputIsValid()" name="go" value="Go!">
+	</form>
+	<script type="text/javascript">
+	function inputIsValid() {
+		var min_ = document.getElementById("minval").value;
+		var max_ = document.getElementById("maxval").value;
+
+		if (min_ > max_ || max_ < min_) {
+			alert("Please insert amount between 1 and 9");
+			return false;
+			document.getElementById("minval").focus();
+		}
+		// return false;
+	}
+	</script>
 </body>
 </html>

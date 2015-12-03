@@ -261,9 +261,6 @@ class Algen {
           $esok = substr($new_ind[$i][$j][$k+1], 0,1);
           if ($kini=="M" AND $esok=="P") $pnl += 1;
           elseif ($kini=="M" AND $esok=="M") $pnl += 1;
-          // if ($kini=="M" AND $esok=="M") {
-          //   $pnl += 1;
-          // }
         }
       }
       array_push($hc_ind, $pnl);
@@ -328,9 +325,9 @@ class Algen {
         if ($hc_m1 < $this->minshift[2] OR $hc_m1 > $this->maxshift[2]) $hc_hari += 1; 
         if ($hc_p2 < $this->minshift[5] OR $hc_p2 > $this->maxshift[5]) $hc_hari += 1; 
         if ($hc_s2 < $this->minshift[6] OR $hc_s2 > $this->maxshift[6]) $hc_hari += 1; 
-        if ($hc_m2 < $this->minshift[7] OR $hc_m1 > $this->maxshift[7]) $hc_hari += 1; 
-        if ($hc_pc < $this->minshift[3] OR $hc_m1 > $this->maxshift[3]) $hc_hari += 1; 
-        if ($hc_sc < $this->minshift[4] OR $hc_m1 > $this->maxshift[4]) $hc_hari += 1; 
+        if ($hc_m2 < $this->minshift[7] OR $hc_m2 > $this->maxshift[7]) $hc_hari += 1; 
+        if ($hc_pc < $this->minshift[3] OR $hc_pc > $this->maxshift[3]) $hc_hari += 1; 
+        if ($hc_sc < $this->minshift[4] OR $hc_sc > $this->maxshift[4]) $hc_hari += 1; 
 
         if ($hc_pp < $this->minshift[8] OR $hc_pp > $this->maxshift[8]) $hc_hari += 1; 
         if ($hc_sp < $this->minshift[9] OR $hc_sp > $this->maxshift[9]) $hc_hari += 1; 

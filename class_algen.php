@@ -15,16 +15,14 @@ class Algen {
 
   function __construct($bln=1, $thn=2016, $minshift=null, $maxshift=null, $pola=null) {
     $mysqli   = new mysqli("localhost", "root", "", "db_jadwal_pkd");
-    $q_aturan = $mysqli->query("SELECT populasi, pc, pm FROM pengaturan WHERE status=1");
     $q_pkd    = $mysqli->query("SELECT COUNT(*) as jum_pkd FROM pkd WHERE jabatan='ANGGOTA' AND status='Aktif'");
-    $q_res_a  = $q_aturan->fetch_object();
     $q_res_p  = $q_pkd->fetch_object();
 
-    $this->jml_ind  = $q_res_a->populasi;
+    $this->jml_ind  = 60;
     $this->jml_pkd  = $q_res_p->jum_pkd;
     $this->jml_hari = cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
-    $this->pc       = $q_res_a->pc;
-    $this->pm       = $q_res_a->pm;
+    $this->pc       = 0.6;
+    $this->pm       = 0.006;
     $this->bulan_x  = $bln;
     $this->tahun_x  = $thn;
     $this->minshift = $minshift;
@@ -34,34 +32,32 @@ class Algen {
 
   // fungsi untuk mengkonversi angka menjadi bulan
   function cetak_bulan($angka) {
-    $bulan = "";
     switch ($angka) {
-      case 1: $bulan = "JANUARI";
+      case 1: return "JANUARI";
       break;
-      case 2: $bulan = "FEBRUARI";
+      case 2: return "FEBRUARI";
       break;
-      case 3: $bulan = "MARET";
+      case 3: return "MARET";
       break;
-      case 4: $bulan = "APRIL";
+      case 4: return "APRIL";
       break;
-      case 5: $bulan = "MEI";
+      case 5: return "MEI";
       break;
-      case 6: $bulan = "JUNI";
+      case 6: return "JUNI";
       break;
-      case 7: $bulan = "JULI";
+      case 7: return "JULI";
       break;
-      case 8: $bulan = "AGUSTUS";
+      case 8: return "AGUSTUS";
       break;
-      case 9: $bulan = "SEPTEMBER";
+      case 9: return "SEPTEMBER";
       break;
-      case 10: $bulan = "OKTOBER";
+      case 10: return "OKTOBER";
       break;
-      case 11: $bulan = "NOVEMBER";
+      case 11: return "NOVEMBER";
       break;
-      case 12: $bulan = "DESEMBER";
+      case 12: return "DESEMBER";
       break;
     }
-    return $bulan;
   }
 
   function shift_siang($shiftnow) {
@@ -94,17 +90,15 @@ class Algen {
   function gen_rand_shift($req="") {
     // $a = array();
     switch ($req) {
-      case "P":
-      $a = array("P1", "P2", "PP", "PC");
+      case "P": $a = array("P1", "P2", "PP", "PC");
       break;
-      case "S":
-      $a = array("S1", "SC", "S2", "SP");
+      case "S": $a = array("S1", "SC", "S2", "SP");
       break;
-      case "M":
-      $a = array("M1", "M2");
+      case "M": $a = array("M1", "M2");
       break;
-      default:
-      $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
+      case "XM": $a = array("P1", "S1", "P2", "S2", "PC", "SC", "PP", "SP");
+      break;
+      default:  $a = array("P1", "S1", "M1", "P2", "S2", "M2", "PC", "SC", "PP", "SP");
       break;
     }
     shuffle($a);
@@ -116,62 +110,60 @@ class Algen {
   function pola_danru($awal_libur=0) {
     switch ($awal_libur) {
       case 0:
-      $shift  = array('L','S','P','S','P','S','L');
+      return array('L','S','P','S','P','S','L');
       break;
       case 1:
-      $shift  = array('L','L','S','P','S','P','S');
+      return array('L','L','S','P','S','P','S');
       break;
       case 2:
-      $shift  = array('S','L','L','S','P','S','P');
+      return array('S','L','L','S','P','S','P');
       break;
       case 3:
-      $shift  = array('P','S','L','L','S','P','S');
+      return array('P','S','L','L','S','P','S');
       break;
       case 4:
-      $shift  = array('S','P','S','L','L','S','P');
+      return array('S','P','S','L','L','S','P');
       break;
       case 5:
-      $shift  = array('P','S','P','S','L','L','S');
+      return array('P','S','P','S','L','L','S');
       break;
       case 6:
-      $shift  = array('S','P','S','P','S','L','L');
+      return array('S','P','S','P','S','L','L');
       break;
       default:
-      $shift  = array('S','P','S','P','S','L','L');
+      return array('S','P','S','P','S','L','L');
       break;
     }
-    return $shift;
   }
 
   // fungsi untuk menentukan pola libur
   function pola($awal_libur=0) {
     switch ($awal_libur) {
       case 0:
-      $shift  = array('S','P','S','P','M','L','L');
+      return array('S','P','S','P','M','L','L');
       break;
       case 1:
-      $shift  = array('L','S','P','S','P','M','L');
+      return array('L','S','P','S','P','M','L');
       break;
       case 2:
-      $shift  = array('L','L','S','P','S','P','M');
+      return array('L','L','S','P','S','P','M');
       break;
       case 3:
-      $shift  = array('M','L','L','S','P','S','P');
+      return array('M','L','L','S','P','S','P');
       break;
       case 4:
-      $shift  = array('P','M','L','L','S','P','S');
+      return array('P','M','L','L','S','P','S');
       break;
       case 5:
-      $shift  = array('S','P','M','L','L','S','P');
+      return array('S','P','M','L','L','S','P');
       break;
       case 6:
-      $shift  = array('P','S','P','M','L','L','S');
+      return array('P','S','P','M','L','L','S');
       break;
       default:      
-      $shift  = array('P','S','P','M','L','L','S');
+      return array('P','S','P','M','L','L','S');
       break;
-    }
-    return $shift;
+    }  
   }
 
   // fungsi untuk generate individu
@@ -196,13 +188,11 @@ class Algen {
     for ($y=0; $y < $this->jml_ind; $y++) { // individu , populasi
       $key = 0;
       for ($x=0; $x < $this->jml_pkd; $x++) { // pkd
-        for ($i=0; $i < $this->jml_hari; $i++) { // hari
-          $acak = $this->gen_rand_shift();
-          if ($shift[$key]=="L") $acak2 = "L";
-          elseif ($shift[$key]=="P") $acak2 = $this->gen_rand_shift("P");
+        for ($i=0; $i < $this->jml_hari; $i++) { // hari          
+          if ($shift[$key]=="P") $acak2 = $this->gen_rand_shift("P");
           elseif ($shift[$key]=="S") $acak2 = $this->gen_rand_shift("S");
           elseif ($shift[$key]=="M") $acak2 = $this->gen_rand_shift("M");
-          else $acak2 = $acak;
+          else $acak2 = "L";
           array_push($hari, $acak2);
           $key++;
           if ($key>=count($shift)) $key = 0;
@@ -221,8 +211,8 @@ class Algen {
       array_push($ind, $pkd);
       $pkd = array();
     }
+    unset($pkd, $hari, $shift);
     return $ind;
-    $ind = array();
   }
 
   // penalti ini terjadi apabila seorang petugas sudah 2 hari libur dan besok tidak masuk siang
@@ -244,6 +234,7 @@ class Algen {
       array_push($hc_ind, $pnl);
       $pnl = 0;
     }
+    unset($new_ind);
     return $hc_ind;
   }
 
@@ -266,6 +257,7 @@ class Algen {
       array_push($hc_ind, $pnl);
       $pnl = 0;
     }
+    unset($new_ind);
     return $hc_ind;
   }
 
@@ -341,6 +333,7 @@ class Algen {
       $hc_hari = 0;
     }
     // print_r($hc_ind);
+    unset($new_ind);
     return $hc_ind;
   }
 
@@ -448,6 +441,7 @@ class Algen {
   function n_fitness($hc) {
     $a = 1+($hc);
     $fit = round((1/$a), 6);
+    unset($hc);
     return $fit;
   }
 
@@ -460,6 +454,7 @@ class Algen {
       $b = $this->n_fitness($x1[$i]);
       array_push($fitness, $b);
     }
+    unset($individu, $x1);
     return $fitness;
   }
 
@@ -474,6 +469,7 @@ class Algen {
       $b = $this->n_fitness($a);
       array_push($fitness, $b);
     }
+    unset($individu,$x1,$x2);
     return $fitness;
   }
 
@@ -484,11 +480,13 @@ class Algen {
     $x2       = $this->cek_shiftMP($individu); // testing cek libur
     $x3       = $this->cek_shiftHR($individu); // testing cek libur
 
-    for ($i=0; $i < count($individu); $i++) {
+    $pjg_ind = count($individu);
+    for ($i=0; $i < $pjg_ind; $i++) {
       $a = $x1[$i] + $x2[$i] + $x3[$i];
       $b = $this->n_fitness($a);
       array_push($fitness, $b);
     }
+    unset($individu,$x1,$x2,$x3);
     return $fitness;
   }
 
@@ -539,18 +537,20 @@ class Algen {
         }
       }
     }
+    unset($new_individu,$new_poin,$probfit,$arr_poin_rw,$range,$fit_masing2,$tot_fit);
     return $new_in;
   }
 
   // fungsi untuk memulai crossover
   function do_crossover($individu) {
     $new_ind_co = $individu;
+    $j_ind = count($individu);
     $b3 = 0;
     $bts = count($individu[0][0])-2; // 28
     $individu_co = array();
 
     while ($b3 < 2) {
-      for ($i=0; $i < count($individu); $i++) {
+      for ($i=0; $i < $j_ind; $i++) {
         $op = $this->random_0_1();
         if ( $op < $this->pc) {
           $individu_co[] = $i; //mencari nilai random untuk perbandingan dgn pc
@@ -593,8 +593,8 @@ class Algen {
       }
     }
     // $individu = array();
+    unset($individu,$j_ind,$individu_co);
     return $new_ind_co;
-    // return array_merge($new_ind_co, $new_ind_co2);
   }
 
   // fungsi untuk memulai mutasi
@@ -602,10 +602,13 @@ class Algen {
     $output_array = array();
     $selected 		= array();
     $new_ind_mu 	= array();
+    $j_ind = count($individu);
+    $j_pkd = count($individu[0]);
+    $j_hr  = count($individu[0][0]);
 
-    for ($i = 0; $i < count($individu); $i++) {
-      for ($j = 0; $j < count($individu[$i]); $j++) {
-        for ($k = 0; $k < count($individu[$i][$j]); $k++) {
+    for ($i = 0; $i < $j_ind; $i++) {
+      for ($j = 0; $j < $j_pkd; $j++) {
+        for ($k = 0; $k < $j_hr; $k++) {
           $output_array[] = $individu[$i][$j][$k];
         }
       }
@@ -613,26 +616,28 @@ class Algen {
 
     $pjg 		= count($output_array); // menghitung panjang array 1 dimensi => 1500
     $jmlmut = round($this->pm * $pjg); // mengkalikan pm dgn 1500 => 15
-    for ($l=0; $l < $jmlmut; $l++) {
-      $n_ran 			= mt_rand(0, $pjg-1); // membangkitkan nilai random 0-1499
-      // $n_ran 			= mt_rand(0, $pjg-1); // membangkitkan nilai random 0-1499
-      $selected[] = $n_ran; // memasukkan gen-gen terpilih ke array $selected
+    $ijm = 0; // isi jumlah mutasi
+    while($ijm < $jmlmut) {
+      $n_ran = mt_rand(0, $pjg-1); // membangkitkan nilai random 0-total panjang gen dlm populasi mutasi
+      if(!in_array($n_ran, $selected)) {
+        $selected[] = $n_ran; // memasukkan gen-gen terpilih ke array $selected
+        $ijm += 1;
+      }        
     }
     // print_r($selected);
 
-    $bentrok ="";
-    for ($m=0; $m < count($selected); $m++) {
+    $jgm = count($selected); // jumlah gen yg dimutasi
+    for ($m=0; $m < $jgm; $m++) {
       $isl  = $selected[$m]; // mengisi $isl dengan value pada array $selected        
       if ($output_array[$isl] != "L") {
         if ($isl > 0 && $output_array[$isl-1]=="L") {
           $output_array[$isl] = $this->gen_rand_shift("S");
-        } else {
+        } elseif($isl < ($pjg-1) && $output_array[$isl+1]=="L") {
           $output_array[$isl] = $this->gen_rand_shift();
+        } else {
+          $output_array[$isl] = $this->gen_rand_shift("XM");
         }
       }
-    // $ran0123 	= $this->gen_rand_shift();
-    // $output_array[$isl] = $ran0123; // menukar isi dari array $output_array yg terpilih indexnya dgn 0-3
-    // echo $ran0123." ";
     }
 
     $ptg    = count($individu[0]) * count($individu[0][0]);
@@ -644,6 +649,7 @@ class Algen {
       $new_ind_mu[] = $to3d; // memasukan potongan2 $to3d ke array $new_ind_mu
     }
     // print_r($new_ind_mu);
+    unset($individu,$output_array,$selected);
     return $new_ind_mu;
   }
 
@@ -668,15 +674,18 @@ class Algen {
     for ($k=0; $k < $c_next; $k++) { // memasukkan 20 array teratas berdasarkan fitnessnya
       $new_parent2[] = $new_parent[$next_new[$k]];
     }
+    unset($ind1,$ind2,$new_parent,$next_new,$fit3);
     return $new_parent2;
   }
 
   // fungsi menjalankan seluruh proses algen
   function do_algen($gen_baru) {
+    shuffle($gen_baru);
     $rw = $this->do_roullete_wheel($gen_baru);
     $co = $this->do_crossover($rw);
     $gen_now = $this->do_mutation($co);
     $gen_update = $this->do_update_generation($gen_baru, $gen_now);
+    unset($gen_baru,$rw,$co,$gen_now);
     return $gen_update;
   }
 } // batas class

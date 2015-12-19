@@ -31,7 +31,7 @@
     }    
 
     $mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
-    $kueri1 = $mysqli->query("INSERT INTO jadwal(id_jadwal, id_admin, bln, thn, pola) VALUES('$id_jad', $id_adm, '$bt[1]', '$bt[0]', 3)");
+    $kueri1 = $mysqli->query("INSERT INTO jadwal(id_jadwal, id_admin, bln, thn) VALUES('$id_jad', $id_adm, '$bt[1]', '$bt[0]')");
     if ($kueri1) {
       $pairs = array();
       for ($i=0; $i < $jum_pkd; $i++) {

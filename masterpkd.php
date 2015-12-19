@@ -10,6 +10,13 @@
 
   <!-- Main content -->
   <section class="content">
+    <?php 
+    // echo $_SERVER['REQUEST_URI'];
+      if ($_SERVER['REQUEST_URI'] == "/te-A-pkD/main.php?page=2/editok") {
+      // if ($_SERVER['HTTP_REFERER'] == "http://localhost/te-A-pkD/main.php?page=2/editok") {
+        echo "ok";
+      }
+    ?>
     <div class="modal fade" id="addPKD">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -115,7 +122,7 @@
                               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
                               <div class="form-group">
                                 <label>NIK</label>
-                                <input type="text" class="form-control" name="nik" value="<?php echo $row->nik; ?>" required>
+                                <input type="text" class="form-control" name="nik" value="<?php echo $row->nik; ?>" readonly>
                               </div>
                               <div class="form-group">
                                 <label>Nama</label>

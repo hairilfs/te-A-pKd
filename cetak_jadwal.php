@@ -1,8 +1,9 @@
 <?php
 $kd_jdw = $_GET['idjdw'];
+$f_name = $kd_jdw.".xls";
 header("Content-type: application/vnd.ms-excel");
-header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment; filename='$kd_jdw.xls'");//ganti nama sesuai keperluan
+// header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment; filename='$f_name'");//ganti nama sesuai keperluan
 
 $nikpkd = array();
 $jadwal = array();
@@ -24,6 +25,14 @@ for ($i=0; $i < count($nikpkd); $i++) {
 // echo "<pre>";
 // print_r($jadwal);
 // echo "</pre>";
+
+// get username admin
+$q_adm_jdw = $mysqli->query("SELECT id_admin FROM jadwal WHERE id_jadwal='$kd_jdw'");
+$q_res_adm = $q_adm_jdw->fetch_assoc();
+$kd_adm = $q_res_adm['id_admin'];
+$q_uname = $mysqli->query("SELECT username FROM admin WHERE id='$kd_adm'");
+$q_res_uname = $q_uname->fetch_assoc();
+$uname = $q_res_uname['username'];
 ?>
 <html>
 <head>
@@ -209,7 +218,7 @@ for ($i=0; $i < count($nikpkd); $i++) {
 						<tr></tr>
 						<tr></tr>
 						<tr>
-							<td colspan="7">DANRU</td>
+							<td colspan="7"><?php echo strtoupper($uname);?></td>
 							<td colspan="7">DANWIL</td>
 							<td colspan="7">SVP/STAFF STASIUN</td>
 							<td colspan="7">KEPALA STASIUN</td>

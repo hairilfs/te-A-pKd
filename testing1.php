@@ -29,26 +29,20 @@
           set_time_limit(0);
           // get data from database
           if (isset($_POST['genjad'])) {
-            $query = $mysqli->query("SELECT * FROM pengaturan WHERE status=1");
-            $res = $query->fetch_object();
+            // $query = $mysqli->query("SELECT * FROM pengaturan WHERE status=1");
+            // $res = $query->fetch_object();
             $bln = $_POST['selbulan'];
             $thn = $_POST['seltahun'];
             $pola = $_POST['selpola'];
             $minshift = $_POST['min'];
             $maxshift = $_POST['max'];
+            $bts_shift = 0;
 
             for ($p=0; $p < 10; $p++) { 
               if ($minshift[$p] > $maxshift[$p]) {
                 // echo "batas salah";
-                echo "<script>
-                   swal({
-             title: 'Oops, terjadi kesalahan!',
-             text: 'Batas shift salah',
-             type: 'error'
-             }, function(){
-               window.location.replace('main.php?page=1');
-             }); </script>
-                ";
+                $bts_shift = 1;                
+                break;
               }
             }
 
@@ -66,7 +60,18 @@
                window.location.replace("main.php?page=1");
              });
             </script>
-            <?php } else {
+            <?php } elseif($bts_shift > 0) {
+              echo "<script>
+                   swal({
+                   title: 'Oops, terjadi kesalahan!',
+                   text: 'Batas shift minimal tidak boleh lebih besar dari batas shift maksimal',
+                   type: 'error'
+                   }, function(){
+                     window.location.replace('main.php?page=1');
+                   });
+                   </script>";
+                // $bts_shift = 0;
+            } else {
               $thnbln = $thn."-".$bln;
               include_once("class_algen.php");
               $saya = new Algen($bln, $thn, $minshift, $maxshift, $pola);
@@ -77,8 +82,15 @@
               $fitness = 0;
               $gnr = 0;
 
-              while ($gnr<=$res->generasi && $fitness!=1) {
-                $get = $saya->do_algen($gen_baru);
+              while ($gnr<=10000 && $fitness!=1) {
+              // while ($fitness!=1) {
+                // $hasil = array();
+                if ($gnr==0) {                  
+                  $get = $gen_baru;
+                } else {
+                  $get = $saya->do_algen($gen_baru);
+                }
+
                 $hasil = $saya->all_fitness3($get);
 
                 if ($hasil[0] == 1) {
@@ -87,7 +99,7 @@
                   array_push($y_axis, $gnr);
                 }
 
-                if (($gnr%20==0) AND $fitness!=1) {
+                if (($gnr%100==0) AND $fitness!=1) {
                   array_push($fit_it, $hasil[0]);
                   array_push($y_axis, $gnr);
                 }
@@ -95,7 +107,7 @@
                 $gnr++;
                 $gen_baru = $get;
               }
-              echo "Nilai Fitness : ".$hasil[0]." || Generasi ke : ".($gnr-1)." || Populasi : ".$res->populasi." || Pc : ".$res->pc." || Pm : ".$res->pm."<br/>";
+              echo "Nilai Fitness : ".$hasil[0]." || Generasi ke : ".($gnr-1)." || Populasi : ".$saya->jml_ind." || Pc : ".$saya->pc." || Pm : ".$saya->pm."<br/>";
               // echo "<pre>";
               // print_r($hasil);
               // echo "</pre>";
@@ -108,9 +120,13 @@
               $finish = microtime(true) - $start;
               echo 'This page loaded in '.gmdate("H:i:s", $finish)."<br>";
               echo "Start => $now <br> End => ".date("H:i:s");
+              unset($gen_baru);
             }
           }
           ?>
+          <audio autoplay>
+            <source src="dist/sound/success1.mp3" type="audio/mpeg">
+          </audio>
         </div><!-- /.tab-pane -->
         <div class="tab-pane " id="tab_2-2">
           <div class="chart">

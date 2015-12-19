@@ -39,7 +39,7 @@
   if (isset($_POST['editpkd'])) {
     $res = $mysqli->query("UPDATE pkd SET nik='$_POST[nik]', nama='$_POST[nama]', jabatan='$_POST[optjab]', status='$_POST[optstat]' WHERE id='$_POST[id]'");
     if ($res) {
-      header("Location: main.php?page=2");
+      header("Location: main.php?page=2/editok");
     } else {
       echo "<script>alert('error!');</script>";
     }

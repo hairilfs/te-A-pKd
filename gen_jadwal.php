@@ -11,58 +11,6 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <script type="text/javascript">
-    function alertnya(evt) {
-      evt.preventDefault();
-      swal("Oops...!", "Shift minimal dan maksimal belum tepat", "warning");
-      return false;
-    }
-
-    function batasShift() {
-      var min_p1 = document.getElementById("minp1").value;
-      var max_p1 = document.getElementById("maxp1").value;
-      var min_s1 = document.getElementById("mins1").value;
-      var max_s1 = document.getElementById("maxs1").value;
-      var min_m1 = document.getElementById("minm1").value;
-      var max_m1 = document.getElementById("maxm1").value;
-      var min_pc = document.getElementById("minpc").value;
-      var max_pc = document.getElementById("maxpc").value;
-      var min_sc = document.getElementById("minsc").value;
-      var max_sc = document.getElementById("maxsc").value;
-      var min_p2 = document.getElementById("minp2").value;
-      var max_p2 = document.getElementById("maxp2").value;
-      var min_s2 = document.getElementById("mins2").value;
-      var max_s2 = document.getElementById("maxs2").value;
-      var min_m2 = document.getElementById("minm2").value;
-      var max_m2 = document.getElementById("maxm2").value;
-      var min_pp = document.getElementById("minpp").value;
-      var max_pp = document.getElementById("maxpp").value;
-      var min_sp = document.getElementById("minsp").value;
-      var max_sp = document.getElementById("maxsp").value;
-
-      if(min_p1 > max_p1 || max_p1 < min_p1) {
-        alertnya();
-      } else if(min_s1 > max_s1 || max_s1 < min_s1) {
-        alertnya();
-      } else if(min_m1 > max_m1 || max_m1 < min_m1) {
-        alertnya();
-      } else if(min_pc > max_pc || max_pc < min_pc) {
-        alertnya();
-      } else if(min_sc > max_sc || max_sc < min_sc) {
-        alertnya();
-      } else if(min_p2 > max_p2 || max_p2 < min_p2) {
-        alertnya();
-      } else if(min_s2 > max_s2 || max_s2 < min_s2) {
-        alertnya();
-      } else if(min_m2 > max_m2 || max_m2 < min_m2) {
-        alertnya();
-      } else if(min_pp > max_pp || max_pp < min_pp) {
-        alertnya();
-      } else if(min_sp > max_sp || max_sp < min_sp) {
-        alertnya();    
-      }
-    }
-    </script>
     <div class="modal fade" id="addJadwal" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -240,7 +188,7 @@
                   $no = 1;
                   include_once 'class_konversi.php';
                   $seem = new Konversi();
-                  $res = $mysqli->query("SELECT * FROM jadwal");
+                  $res = $mysqli->query("SELECT * FROM jadwal");                  
                   while ($row = $res->fetch_object()) { ?>
                   <tr>
                     <td><?= $no; ?></td>
@@ -250,7 +198,12 @@
                     <td><?= $seem->nama_admin($row->id_admin); ?></td>
                     <td>
                       <?php
-                      echo "<a href='detil_jadwal.php?idjdw=$row->id_jadwal' target='_blank'><button type='button' class='btn btn-primary'>Cetak</button></a> ";
+                      echo "<a href='cetak_jadwal.php?idjdw=$row->id_jadwal' target='_blank'><button type='button' class='btn btn-primary'>Cetak</button></a> ";
+                      // $adm = $mysqli->query("SELECT id FROM admin WHERE username='$_SESSION[ad_priv]'");
+                      // $res2 = $adm->fetch_assoc();
+                      // if ($row->id_admin == $res2['id']) {                        
+                      //   echo "<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#deljdw$row->id_jadwal'>Hapus</button>";
+                      // }
                       echo "<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#deljdw$row->id_jadwal'>Hapus</button>";
                       ?>
                     </td>

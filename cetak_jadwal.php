@@ -77,10 +77,19 @@ $uname = $q_res_uname['username'];
 				<?php
 				include_once 'class_konversi.php';
 				$getd = new Konversi();
-				echo "<th colspan='".count($jadwal[0])."'>Bulan ".$getd->cetak_bulan(substr($kd_jdw, 1,2))." ".substr($kd_jdw, 3,4)."</th>";
+				echo "<th colspan='".count($jadwal[0])."'>BULAN ".$getd->cetak_bulan(substr($kd_jdw, 1,2))." ".substr($kd_jdw, 3,4)."</th>";
 				echo "<th rowspan='2'>HADIR</th></tr><tr>";
+				$tahun = substr($kd_jdw, 3,4);
+				$bulan = substr($kd_jdw, 1,2);
 				for ($j=0; $j < count($jadwal[0]); $j++) { 
-					echo "<th>".($j+1)."</th>";
+					$hari = $tahun."-".$bulan."-".($j+1);
+					$date1 = strtotime($hari);
+					$date2 = date("l", $date1);
+					if ($date2=="Sunday") {
+						echo "<th style='color: red;'>".($j+1)."</th>";						
+					} else {
+						echo "<th>".($j+1)."</th>";						
+					}
 				}
 				?>				
 			</tr>	
@@ -89,7 +98,7 @@ $uname = $q_res_uname['username'];
 				$data_pkd = explode("-", $getd->nama_pkd($nikpkd[$k]));
 				echo "<tr>";
 				echo "<td>".($k+1)."</td>";
-				echo "<td>".$data_pkd[0]."</td>";
+				echo "<td><b>".$data_pkd[0]."</b></td>";
 				echo "<td>".$data_pkd[1]."</td>";
 				echo "<td>$nikpkd[$k]</td>";
 				for ($l=0; $l < count($jadwal[0]); $l++) { 

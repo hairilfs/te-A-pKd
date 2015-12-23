@@ -1,3 +1,38 @@
+<?php 
+  // insert pkd
+  if (isset($_POST['savepkd'])) {
+    $nmpkd = strtoupper($_POST['nama']);
+    $ref = $mysqli->query("INSERT INTO pkd(nik,nama,jabatan, status) VALUES('$_POST[nik]', '$nmpkd', '$_POST[optjab]', '$_POST[optstat]')");
+    if ($ref) {
+      echo "<script>swal('Sukses!', 'Data berhasil disimpan.', 'success');</script>";
+    } else {
+      echo "<script>swal('Oops!', 'Data gagal disimpan.', 'error');</script>";
+    }
+  }
+
+
+  // edit pkd
+  if (isset($_POST['editpkd'])) {
+    $nmpkd = strtoupper($_POST['nama']);
+    $res = $mysqli->query("UPDATE pkd SET nik='$_POST[nik]', nama='$nmpkd', jabatan='$_POST[optjab]', status='$_POST[optstat]' WHERE id='$_POST[id]'");
+    if ($res) {
+      echo "<script>swal('Sukses!', 'Data berhasil diubah.', 'success');</script>";
+    } else {
+      echo "<script>swal('Oops!', 'Data gagal diubah.', 'error');</script>";
+    }
+  }
+
+    // hapus pkd
+  if (isset($_POST['dohapus'])) {
+    $idnya = $_POST['idpkd'];
+    $req = $mysqli->query("DELETE FROM pkd WHERE id='$idnya'");
+    if ($req) {
+      echo "<script>swal('Sukses!', 'Data berhasil dihapus.', 'success');</script>";
+    } else {
+      echo "<script>swal('Oops!', 'Data gagal dihapus.', 'error');</script>";
+    }
+  }
+?>
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -10,13 +45,6 @@
 
   <!-- Main content -->
   <section class="content">
-    <?php 
-    // echo $_SERVER['REQUEST_URI'];
-      if ($_SERVER['REQUEST_URI'] == "/te-A-pkD/main.php?page=2/editok") {
-      // if ($_SERVER['HTTP_REFERER'] == "http://localhost/te-A-pkD/main.php?page=2/editok") {
-        echo "ok";
-      }
-    ?>
     <div class="modal fade" id="addPKD">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -24,7 +52,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">Tambah PKD</h4>
           </div>
-          <form class="form-horizontal" action="model.php" method="post">
+          <form class="form-horizontal" action="" method="post">
             <div class="modal-body">
               <div class="form-group">
                 <label class="col-sm-2 control-label">NIK</label>
@@ -35,7 +63,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Nama</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama" required>
+                  <input type="text" class="form-control" style='text-transform:uppercase' name="nama" placeholder="Nama" required>
                 </div>
               </div>
               <div class="form-group">
@@ -117,7 +145,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">Ubah PKD</h4>
                           </div>
-                          <form action="model.php" method="post">
+                          <form action="" method="post">
                             <div class="modal-body">
                               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
                               <div class="form-group">
@@ -126,7 +154,7 @@
                               </div>
                               <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control" name="nama" value="<?php echo $row->nama; ?>" required>
+                                <input type="text" class="form-control" style='text-transform:uppercase' name="nama" value="<?php echo $row->nama; ?>" required>
                               </div>
                               <label>Jabatan</label>
                               <div class="form-group">
@@ -167,10 +195,11 @@
                             <p>Yakin akan menghapus <?= $row->nama; ?>?</p>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Lain kali</button>&nbsp;
-                            <a href="model.php?do=delpkd&id=<?php echo $row->id; ?>">
-                              <button type="button" class="btn btn-danger">Ya, hapus</button>
-                            </a>
+                            <form action="" method="post">
+                              <input type="hidden" name="idpkd" value="<?= $row->id;?>">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Lain kali</button>&nbsp;
+                              <button type="submit" class="btn btn-danger" name="dohapus">Ya, hapus</button>                              
+                            </form>
                           </div>
                         </div><!-- /.modal-content -->
                       </div><!-- /.modal-dialog -->

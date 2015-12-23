@@ -1,3 +1,12 @@
+<?php
+if (isset($_POST['apusjdw'])) {
+  $sqlapusjad = $mysqli->query("DELETE FROM jadwal WHERE id_jadwal='$_POST[idapus]'");
+  $sqlapusdtljad = $mysqli->query("DELETE FROM detil_jadwal WHERE id_jadwal='$_POST[idapus]'");
+  if ($sqlapusjad && $sqlapusdtljad) {
+    echo "<script>swal('Sukses!', 'Jadwal berhasil dihapus.', 'success');</script>";
+  }
+}
+?>
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -240,12 +249,3 @@
     </div><!-- /.row -->
   </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
-<?php 
-if (isset($_POST['apusjdw'])) {
-  $sqlapusjad = $mysqli->query("DELETE FROM jadwal WHERE id_jadwal='$_POST[idapus]'");
-  $sqlapusdtljad = $mysqli->query("DELETE FROM detil_jadwal WHERE id_jadwal='$_POST[idapus]'");
-  if ($sqlapusjad && $sqlapusdtljad) {
-    echo "<script>swal('Sukses!', 'Jadwal berhasil dihapus.', 'success');</script>";
-  }
-}
-?>

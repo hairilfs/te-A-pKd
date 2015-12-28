@@ -101,7 +101,7 @@ if (isset($_POST['apusjdw'])) {
                       </tr>
                       <tr>
                         <td><b>P1</b></td>
-                        <td><input class="form-control" type="number" id="minp1" name="min[]" min="1" value="1"></td>
+                        <td><input class="form-control" type="number" id="minp1" name="min[]" min="1" value="2"></td>
                         <td><input class="form-control" type="number" id="maxp1" name="max[]" min="1" value="2"></td>
                       </tr>
                       <tr>
@@ -135,12 +135,12 @@ if (isset($_POST['apusjdw'])) {
                       </tr>
                       <tr>
                         <td><b>P2</b></td>
-                        <td><input class="form-control" type="number" id="minp2" name="min[]" min="1" value="1"></td>
+                        <td><input class="form-control" type="number" id="minp2" name="min[]" min="1" value="2"></td>
                         <td><input class="form-control" type="number" id="maxp2" name="max[]" min="1" value="2"></td>
                       </tr>
                       <tr>
                         <td><b>S2</b></td>
-                        <td><input class="form-control" type="number" id="mins2" name="min[]" min="1" value="1"></td>
+                        <td><input class="form-control" type="number" id="mins2" name="min[]" min="1" value="2"></td>
                         <td><input class="form-control" type="number" id="maxs2" name="max[]" min="1" value="2"></td>
                       </tr>
                       <tr>
@@ -156,7 +156,7 @@ if (isset($_POST['apusjdw'])) {
                       <tr>
                         <td><b>SP</b></td>
                         <td><input class="form-control" type="number" id="minsp" name="min[]" min="1" value="1"></td>
-                        <td><input class="form-control" type="number" id="maxsp" name="max[]" min="1" value="2"></td>
+                        <td><input class="form-control" type="number" id="maxsp" name="max[]" min="1" value="3"></td>
                       </tr>
                     </table>
                   </div>

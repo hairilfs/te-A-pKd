@@ -55,6 +55,7 @@
      background-color: #DDDDDD;
     }
   </style>
+  <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">

@@ -394,8 +394,8 @@ class Algen {
         $key2++;
         if ($key2>=count($code2)) $key2 = 0;
       }
-      if ($key2 >= count($code2)-1) $key2 = 0;
-      else $key2 = $key2 + 1;
+      // if ($key2 >= count($code2)-1) $key2 = 0;
+      // else $key2 = $key2 + 1;
       echo "</tr>\n";
 
       for ($j=0; $j < $loop_pkd; $j++) {
@@ -404,30 +404,85 @@ class Algen {
         echo "<td>".$namapkd[$j]."</td>";
         echo "<input type='hidden' name='nik[]' value='$nikpkd[$j]'>";
         for ($k=0; $k < $loop_hari; $k++) {
-          if ($k != ($loop_hari-1) AND substr($individu[$i][$j][$k], 0, 1)=="M" AND substr($individu[$i][$j][$k+1], 0, 1)=="P") {
-            echo "<td align='center' style='background: blue;'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
-          } elseif ($k==0 && substr($individu[$i][$j][0], 0,1)!="S" && $individu[$i][$j][$k+5]=="L" && $individu[$i][$j][$k+6]=="L") {
-            echo "<td align='center' style='background: yellow;'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
-          } elseif ($k==1 AND substr($individu[$i][$j][1], 0,1)!="S" AND $individu[$i][$j][$k+5]=="L" && $individu[$i][$j][$k+6]=="L") {
-            echo "<td align='center' style='background: yellow;'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
-          } elseif ($k>=2 && $individu[$i][$j][$k-2]=="L" AND $individu[$i][$j][$k-1]=="L" AND substr($individu[$i][$j][$k], 0, 1)!="S") {
-            echo "<td align='center' style='background: yellow;'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
-          } elseif ($individu[$i][$j][$k]!= "L") {
-            echo "<td align='center'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
-          } else {
+          if ($individu[$i][$j][$k]=="L") {
             echo "<td align='center' style='background: red;'>".$individu[$i][$j][$k]."</td>";
-            echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
+          } else {
+            echo "<td align='center' class='".$individu[$i][$j][$k].$k."' >".$individu[$i][$j][$k]."</td>";
           }
+          echo "<input type='hidden' name=shift[".($j+1)."][] value='".$individu[$i][$j][$k]."'>";
         }
         echo "</tr>";
       }
       echo "</table>\n</div>";
+
+      $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
+      $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
+      $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
+      $hc_sp = 0;
+
+      for ($q=0; $q < $loop_aja; $q++) {
+        for ($w=0; $w < $loop_hari; $w++) {
+          for ($e=0; $e < $loop_pkd; $e++) {
+            $isi_gen = $individu[$q][$e][$w];
+            switch ($isi_gen) {
+              case 'P1':
+              $hc_p1 += 1;
+              break;
+              case 'S1':
+              $hc_s1 += 1;
+              break;
+              case 'M1':
+              $hc_m1 += 1;
+              break;
+              case 'P2':
+              $hc_p2 += 1;
+              break;
+              case 'S2':
+              $hc_s2 += 1;
+              break;
+              case 'M2':
+              $hc_m2 += 1;
+              break;
+              case 'PC':
+              $hc_pc += 1;
+              break;
+              case 'SC':
+              $hc_sc += 1;
+              break;
+              case 'PP':
+              $hc_pp += 1;
+              break;
+              case 'SP':
+              $hc_sp += 1;
+              break;
+              default:
+              break;
+            }
+          }
+
+          if ($hc_p1 < $this->minshift[0] OR $hc_p1 > $this->maxshift[0]) echo "<script>$('.P1".$w."').css('background-color', '#90EE90')</script>";
+          if ($hc_s1 < $this->minshift[1] OR $hc_s1 > $this->maxshift[1]) echo "<script>$('.S1".$w."').css('background-color', '#D3D3D3')</script>";
+          if ($hc_m1 < $this->minshift[2] OR $hc_m1 > $this->maxshift[2]) echo "<script>$('.M1".$w."').css('background-color', '#FFB6C1')</script>";
+          if ($hc_p2 < $this->minshift[5] OR $hc_p2 > $this->maxshift[5]) echo "<script>$('.P2".$w."').css('background-color', '#FFA07A')</script>";
+          if ($hc_s2 < $this->minshift[6] OR $hc_s2 > $this->maxshift[6]) echo "<script>$('.S2".$w."').css('background-color', '#20B2AA')</script>";
+          if ($hc_m2 < $this->minshift[7] OR $hc_m2 > $this->maxshift[7]) echo "<script>$('.M2".$w."').css('background-color', '#87CEFA')</script>";
+          if ($hc_pc < $this->minshift[3] OR $hc_pc > $this->maxshift[3]) echo "<script>$('.PC".$w."').css('background-color', '#778899')</script>";
+          if ($hc_sc < $this->minshift[4] OR $hc_sc > $this->maxshift[4]) echo "<script>$('.SC".$w."').css('background-color', '#9370DB')</script>";
+
+          if ($hc_pp < $this->minshift[8] OR $hc_pp > $this->maxshift[8]) echo "<script>$('.PP".$w."').css('background-color', '#F0E68C')</script>";
+          if ($hc_sp < $this->minshift[9] OR $hc_sp > $this->maxshift[9]) echo "<script>$('.SP".$w."').css('background-color', '#FFD700')</script>";
+
+          $hc_p1 = 0;   $hc_s1 = 0;   $hc_m1 = 0;
+          $hc_p2 = 0;   $hc_s2 = 0;   $hc_m2 = 0;
+          $hc_pc = 0;   $hc_sc = 0;   $hc_pp = 0;
+          $hc_sp = 0;   
+        }
+      }
     }
+
+    // echo $loop_pkd;
+    // echo $loop_hari;
+    // echo '<script>$(".L").css("background-color", "red");</script>';
     echo "Simpan jadwal? Jika ya, maka jadwal bulan ".$this->cetak_bulan($this->bulan_x)." ".$this->tahun_x." akan tersimpan dan <span class='bg-danger'>tidak dapat diubah.</span>&nbsp;&nbsp;";
   }
 
@@ -477,12 +532,13 @@ class Algen {
   function all_fitness3($individu) {
     $fitness  = array();
     $x1       = $this->cek_shiftLLS($individu); // testing cek libur
-    $x2       = $this->cek_shiftMP($individu); // testing cek libur
+    // $x2       = $this->cek_shiftMP($individu); // testing cek libur
     $x3       = $this->cek_shiftHR($individu); // testing cek libur
 
     $pjg_ind = count($individu);
     for ($i=0; $i < $pjg_ind; $i++) {
-      $a = $x1[$i] + $x2[$i] + $x3[$i];
+      // $a = $x1[$i] + $x2[$i] + $x3[$i];
+      $a = $x1[$i] + $x3[$i];
       $b = $this->n_fitness($a);
       array_push($fitness, $b);
     }

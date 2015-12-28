@@ -82,7 +82,7 @@
               $fitness = 0;
               $gnr = 0;
 
-              while ($gnr<=50 && $fitness!=1) {
+              while ($gnr<=2000 && $fitness!=1) {
               // while ($fitness!=1) {
                 // $hasil = array();
                 if ($gnr==0) {                  
@@ -99,7 +99,7 @@
                   array_push($y_axis, $gnr);
                 }
 
-                if (($gnr%5==0) AND $fitness!=1) {
+                if (($gnr%50==0) AND $fitness!=1) {
                   array_push($fit_it, $hasil[0]);
                   array_push($y_axis, $gnr);
                 }
@@ -118,7 +118,7 @@
               echo "<form><br>";
 
               $finish = microtime(true) - $start;
-              echo 'This page loaded in '.gmdate("H:i:s", $finish)."<br>";
+              echo 'Waktu eksekusi => '.gmdate("H:i:s", $finish)."<br>";
               echo "Start => $now <br> End => ".date("H:i:s");
               unset($gen_baru);
             }

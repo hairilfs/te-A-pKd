@@ -1,12 +1,13 @@
 <?php 
   // insert pkd
   if (isset($_POST['savepkd'])) {
+    // $ref = ;
     $nmpkd = strtoupper($_POST['nama']);
-    $ref = $mysqli->query("INSERT INTO pkd(nik,nama,jabatan, status) VALUES('$_POST[nik]', '$nmpkd', '$_POST[optjab]', '$_POST[optstat]')");
+    $ref = $mysqli->query("INSERT INTO pkd(nik,nama,jabatan,status) VALUES('$_POST[nik]', '$nmpkd', '$_POST[optjab]', '$_POST[optstat]')");
     if ($ref) {
       echo "<script>swal('Sukses!', 'Data berhasil disimpan.', 'success');</script>";
     } else {
-      echo "<script>swal('Oops!', 'Data gagal disimpan.', 'error');</script>";
+      echo '<script>swal("Oops!", "Data gagal disimpan. '.$mysqli->error.'", "error");</script>';;
     }
   }
 
@@ -14,22 +15,22 @@
   // edit pkd
   if (isset($_POST['editpkd'])) {
     $nmpkd = strtoupper($_POST['nama']);
-    $res = $mysqli->query("UPDATE pkd SET nik='$_POST[nik]', nama='$nmpkd', jabatan='$_POST[optjab]', status='$_POST[optstat]' WHERE id='$_POST[id]'");
+    $res = $mysqli->query("UPDATE pkd SET nama='$nmpkd', jabatan='$_POST[optjab]', status='$_POST[optstat]' WHERE nik='$_POST[nik]'");
     if ($res) {
       echo "<script>swal('Sukses!', 'Data berhasil diubah.', 'success');</script>";
     } else {
-      echo "<script>swal('Oops!', 'Data gagal diubah.', 'error');</script>";
+      echo '<script>swal("Oops!", "Data gagal diubah. '.$mysqli->error.'", "error");</script>';
     }
   }
 
     // hapus pkd
   if (isset($_POST['dohapus'])) {
     $idnya = $_POST['idpkd'];
-    $req = $mysqli->query("DELETE FROM pkd WHERE id='$idnya'");
+    $req = $mysqli->query("DELETE FROM pkd WHERE nik='$idnya'");
     if ($req) {
       echo "<script>swal('Sukses!', 'Data berhasil dihapus.', 'success');</script>";
     } else {
-      echo "<script>swal('Oops!', 'Data gagal dihapus.', 'error');</script>";
+      echo '<script>swal("Oops!", "Data gagal dihapus. '.$mysqli->error.'", "error");</script>';
     }
   }
 ?>
@@ -132,13 +133,13 @@
                       ?>
                       <td>
                         <?php
-                        echo "<button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editpkd$row->id'>Ubah</button> &nbsp;";
-                        echo "<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#delpkd$row->id'>Hapus</button>";
+                        echo "<button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editpkd$row->nik'>Ubah</button> &nbsp;";
+                        echo "<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#delpkd$row->nik'>Hapus</button>";
                         ?>
                       </td>
                     </tr>
 
-                    <div class="modal fade" id="editpkd<?php echo $row->id; ?>">
+                    <div class="modal fade" id="editpkd<?php echo $row->nik; ?>">
                       <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -147,10 +148,11 @@
                           </div>
                           <form action="" method="post">
                             <div class="modal-body">
-                              <input type="hidden" name="id" value="<?php echo $row->id; ?>">
+                              <input type="hidden" name="id" value="<?php echo $row->nik; ?>">
                               <div class="form-group">
                                 <label>NIK</label>
-                                <input type="text" class="form-control" name="nik" value="<?php echo $row->nik; ?>" readonly>
+                                <input type="hidden" name="nik" value="<?php echo $row->nik; ?>">
+                                <input type="text" class="form-control" name="niktampil" value="<?php echo $row->nik; ?>" disabled>
                               </div>
                               <div class="form-group">
                                 <label>Nama</label>
@@ -184,7 +186,7 @@
                       </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
 
-                    <div class="modal fade" id="delpkd<?= $row->id; ?>">
+                    <div class="modal fade" id="delpkd<?= $row->nik; ?>">
                       <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -196,7 +198,7 @@
                           </div>
                           <div class="modal-footer">
                             <form action="" method="post">
-                              <input type="hidden" name="idpkd" value="<?= $row->id;?>">
+                              <input type="hidden" name="idpkd" value="<?= $row->nik;?>">
                               <button type="button" class="btn btn-default" data-dismiss="modal">Lain kali</button>&nbsp;
                               <button type="submit" class="btn btn-danger" name="dohapus">Ya, hapus</button>                              
                             </form>

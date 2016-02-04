@@ -22,39 +22,6 @@
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- sweeetalert -->
   <script src="dist/js/sweetalert2.min.js"></script>
-  <style media="screen">
-    .no-arrow {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      /*text-indent: 1px;*/
-      /*text-overflow: '';*/
-      border: 0;
-      width: 100%;
-      height: 100%;
-      background-color: yellow;
-      padding: 0;
-      margin: 0;
-    }
-    .mlm{
-      background-color: yellow !important;
-    }
-    .fit-sel {
-      padding: 0 !important;
-      margin: 0 !important;
-      text-align: center !important;
-    }
-    .borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
-    border: none;
-    }
-    .cent td {
-     text-align: center;
-     vertical-align: middle !important;
-    }
-    .cent th {
-     text-align: center;
-     background-color: #DDDDDD;
-    }
-  </style>
   <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">

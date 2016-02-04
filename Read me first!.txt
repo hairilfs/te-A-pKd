@@ -1,0 +1,15 @@
+database
+====================
+name : db_jadwal_pkd.sql
+host : localhost
+user : root
+pass : 
+
+
+admin 
+=====================
+user : danru
+pass : sudimara
+
+user : kepala stasiun
+pass : kepala stasiun

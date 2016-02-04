@@ -2,11 +2,11 @@
 // ini class untuk memproses algen
 
 class Algen {
-  public $jml_ind;
+  public $jml_ind = 80;
   public $jml_pkd;
   public $jml_hari;
-  public $pc;
-  public $pm;
+  public $pc = 0.6;
+  public $pm = 0.006;
   public $bulan_x;
   public $tahun_x;
   public $minshift;
@@ -18,11 +18,8 @@ class Algen {
     $q_pkd    = $mysqli->query("SELECT COUNT(*) as jum_pkd FROM pkd WHERE jabatan='ANGGOTA' AND status='Aktif'");
     $q_res_p  = $q_pkd->fetch_object();
 
-    $this->jml_ind  = 60;
     $this->jml_pkd  = $q_res_p->jum_pkd;
     $this->jml_hari = cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
-    $this->pc       = 0.6;
-    $this->pm       = 0.006;
     $this->bulan_x  = $bln;
     $this->tahun_x  = $thn;
     $this->minshift = $minshift;
@@ -227,7 +224,7 @@ class Algen {
         for ($k=0; $k < $loop_hr; $k++) {
           // $ceksiang = substr($new_ind[$i][$j][$k+2], 0,1);
           if ($k==0 && substr($new_ind[$i][$j][0], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
-          elseif ($k==1 && substr($new_ind[$i][$j][1], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
+          // elseif ($k==1 && substr($new_ind[$i][$j][1], 0,1)!="S" && $new_ind[$i][$j][$k+5]=="L" && $new_ind[$i][$j][$k+6]=="L") $pnl += 1;
           // elseif ($new_ind[$i][$j][$k]=="L" AND $new_ind[$i][$j][$k+1]=="L" AND $ceksiang!="S") $pnl += 1;
         }
       }
@@ -479,10 +476,6 @@ class Algen {
         }
       }
     }
-
-    // echo $loop_pkd;
-    // echo $loop_hari;
-    // echo '<script>$(".L").css("background-color", "red");</script>';
     echo "Simpan jadwal? Jika ya, maka jadwal bulan ".$this->cetak_bulan($this->bulan_x)." ".$this->tahun_x." akan tersimpan dan <span class='bg-danger'>tidak dapat diubah.</span>&nbsp;&nbsp;";
   }
 

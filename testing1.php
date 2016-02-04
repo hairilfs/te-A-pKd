@@ -79,12 +79,15 @@
               $gen_baru = $saya->gen_array_ind();
               $fit_it = array();
               $y_axis = array();
+              $konstan = array();
               $fitness = 0;
               $gnr = 0;
+              $sum_kons = 0;
 
-              while ($gnr<=2000 && $fitness!=1) {
+              while ($gnr<=1 && $fitness!=1) {
+              // while ($gnr<=3000 && $fitness!=1 && (count($konstan)!=5)) {
               // while ($fitness!=1) {
-                // $hasil = array();
+                $hasil = array();
                 if ($gnr==0) {                  
                   $get = $gen_baru;
                 } else {
@@ -93,15 +96,24 @@
 
                 $hasil = $saya->all_fitness3($get);
 
-                if ($hasil[0] == 1) {
+                if ($hasil[0]==1) {
                   $fitness = 1;
-                  array_push($fit_it, $hasil[0]);
-                  array_push($y_axis, $gnr);
+                  $fit_it[] = $hasil[0];
+                  $y_axis[] = $gnr;
                 }
 
-                if (($gnr%50==0) AND $fitness!=1) {
-                  array_push($fit_it, $hasil[0]);
-                  array_push($y_axis, $gnr);
+                if ($gnr%5==0 and $fitness!=1) {
+                  $fit_it[] = $hasil[0];
+                  $y_axis[] = $gnr;
+
+                  // if (count($konstan)==0) {
+                  //   $konstan[] = end($fit_it);                  
+                  // } elseif (end($konstan)==end($fit_it)) {
+                  //   $konstan[] = end($fit_it);                  
+                  // } else {
+                  //   $konstan = array();
+                  //   $konstan[] = end($fit_it);                  
+                  // }
                 }
 
                 $gnr++;

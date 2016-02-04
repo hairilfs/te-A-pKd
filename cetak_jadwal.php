@@ -2,7 +2,6 @@
 $kd_jdw = $_GET['idjdw'];
 $f_name = $kd_jdw.".xls";
 header("Content-type: application/vnd.ms-excel");
-// header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header("Content-Disposition: attachment; filename='$f_name'");//ganti nama sesuai keperluan
 
 $nikpkd = array();
@@ -19,12 +18,8 @@ for ($i=0; $i < count($nikpkd); $i++) {
 	$kueri2 = $mysqli->query("SELECT shift FROM detil_jadwal WHERE id_jadwal='$kd_jdw' AND nik='$nikpkd[$i]'");
 	while ($res2 = $kueri2->fetch_assoc()) {
 		$jadwal[$i][] = $res2['shift'];
-		// $jadwal[$nikpkd[$i]][] = $res2['shift'];
 	}
 }
-// echo "<pre>";
-// print_r($jadwal);
-// echo "</pre>";
 
 // get username admin
 $q_adm_jdw = $mysqli->query("SELECT id_admin FROM jadwal WHERE id_jadwal='$kd_jdw'");
@@ -51,15 +46,11 @@ $uname = $q_res_uname['username'];
 	.red {
 		background-color: red;
 	}
-	/*table, td {
-		padding: 3.5px;
-		}*/
 		</style>
 	</head>
 	<body>
 		<table class="tab-ok">
 			<tr>
-				<!-- <td width="200px" colspan="4"><img src="dist/img/logo-kcj.png" width="100px"></td> -->
 				<td></td>
 				<td></td>
 				<td></td>
@@ -149,9 +140,6 @@ $uname = $q_res_uname['username'];
 				$libur = 0;
 			}
 			echo "</table>\n<table class='tab-ok'>";
-		// echo "<pre>";
-		// print_r($arr_libur);
-		// echo "</pre>";
 
 			echo "<tr><td></td>\n<td></td>\n<td></td>\n<td>PAGI</td>";
 			foreach ($arr_pagi as $keypagi) {
@@ -236,10 +224,6 @@ $uname = $q_res_uname['username'];
 				</td>
 			</tr>
 		</table>
-
-		<!-- // <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script> -->
-		<!-- // <script src="plugins/jQueryUI/jquery-ui.min.js"></script> -->
-		<!-- // <script src="bootstrap/js/bootstrap.min.js"></script> -->
 	</body>
 	</html>
 	<?php exit(); ?>

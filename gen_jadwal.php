@@ -106,7 +106,7 @@ if (isset($_POST['apusjdw'])) {
                       </tr>
                       <tr>
                         <td><b>S1</b></td>
-                        <td><input class="form-control" type="number" id="mins1" name="min[]" min="1" value="1"></td>
+                        <td><input class="form-control" type="number" id="mins1" name="min[]" min="1" value="2"></td>
                         <td><input class="form-control" type="number" id="maxs1" name="max[]" min="1" value="2"></td>
                       </tr>
                       <tr>

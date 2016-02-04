@@ -1,8 +1,5 @@
 <?php
 $mysqli = new mysqli("localhost", "root", "", "db_jadwal_pkd");
-// if ($mysqli->connect_errno) {
-//   echo "Koneksi database gagal! : ".$mysqli->connect_error();
-// }
 
 // cek user
 if (isset($_POST['ulogin'])) {
